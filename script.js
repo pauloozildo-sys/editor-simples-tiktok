@@ -294,3 +294,140 @@ document.getElementById('exportarBtn').addEventListener('click', async function(
     btn.disabled = false;
   }
 });
+
+// =============================================
+// ASSISTENTE IA (CHATGPT)
+// =============================================
+
+const comandoInput = document.getElementById('comandoIA');
+const btnIA = document.getElementById('btnIA');
+const statusIA = document.getElementById('statusIA');
+
+// FUNÇÃO PARA EXECUTAR A AÇÃO NO EDITOR
+function executarAcaoIA(acao) {
+  switch (acao.acao) {
+    case 'texto':
+      textoInput.value = acao.conteudo;
+      desenharPreview();
+      break;
+
+    case 'posicao':
+      // Clica no botão de posição correspondente
+      const posBtn = document.querySelector(`.posBtn[data-pos="${acao.valor}"]`);
+      if (posBtn) posBtn.click();
+      break;
+
+    case 'alinhamento':
+      const alinBtn = document.querySelector(`.alignBtn[data-align="${acao.valor}"]`);
+      if (alinBtn) alinBtn.click();
+      break;
+
+    case 'selo':
+      const btnSelo = acao.qual === 'coracao' 
+        ? document.getElementById('btnFiltroCoracao')
+        : document.getElementById('btnFiltroTaca');
+      
+      // Verifica se o selo já está ativo e só clica se precisar
+      const seloImg = acao.qual === 'coracao' 
+        ? document.getElementById('seloFlutuanteCoracao')
+        : document.getElementById('seloFlutuanteTaca');
+      
+      const estaAtivo = seloImg && seloImg.style.display === 'block';
+      if ((acao.estado === 'ativar' && !estaAtivo) || 
+          (acao.estado === 'desativar' && estaAtivo)) {
+        if (btnSelo) btnSelo.click();
+      }
+      break;
+  }
+}
+
+// FUNÇÃO PARA CHAMAR A IA
+async function chamarIA(comando) {
+  const CHAVE_API = 'SUA_CHAVE_AQUI'; // <-- COLOQUE SUA CHAVE
+
+  try {
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${CHAVE_API}`
+      },
+      body: JSON.stringify({
+        model: 'gpt-3.5-turbo',
+        messages: [
+          {
+            role: 'system',
+            content: `Você é um assistente de edição de vídeos. 
+            O usuário vai pedir algo e você deve retornar APENAS UM JSON com as ações necessárias.
+            As ações possíveis são:
+            - {"acao": "texto", "conteudo": "..."}
+            - {"acao": "posicao", "valor": "topo" ou "centro" ou "base" ou "canto"}
+            - {"acao": "alinhamento", "valor": "esquerda" ou "centro" ou "direita"}
+            - {"acao": "selo", "qual": "coracao" ou "taca", "estado": "ativar" ou "desativar"}
+            
+            Exemplo: se o usuário pedir "coloca a taça no canto com um texto motivacional", você retorna:
+            [{"acao":"posicao","valor":"canto"},{"acao":"selo","qual":"taca","estado":"ativar"},{"acao":"texto","conteudo":"VOCÊ É MINHA TAÇA 🏆"}]
+            Retorne APENAS o JSON, sem explicações.`
+          },
+          { role: 'user', content: comando }
+        ],
+        temperature: 0.7
+      })
+    });
+
+    const data = await response.json();
+    const conteudo = data.choices[0].message.content;
+    
+    // Tenta parsear o JSON
+    try {
+      const acoes = JSON.parse(conteudo);
+      return Array.isArray(acoes) ? acoes : [acoes];
+    } catch {
+      // Se não for JSON, tenta extrair com regex
+      const match = conteudo.match(/\[.*\]/s);
+      if (match) return JSON.parse(match[0]);
+      throw new Error('Resposta da IA não é um JSON válido');
+    }
+  } catch (error) {
+    console.error('Erro na IA:', error);
+    statusIA.textContent = '❌ Erro ao chamar IA. Verifique sua chave ou conexão.';
+    return null;
+  }
+}
+
+// EVENTO DO BOTÃO IA
+btnIA.addEventListener('click', async () => {
+  const comando = comandoInput.value.trim();
+  if (!comando) {
+    statusIA.textContent = '⚠️ Digite um comando primeiro!';
+    return;
+  }
+
+  // Desabilita o botão enquanto processa
+  btnIA.disabled = true;
+  btnIA.textContent = '⏳ Pensando...';
+  statusIA.textContent = '🤖 IA está processando seu pedido...';
+
+  const acoes = await chamarIA(comando);
+
+  if (acoes && acoes.length > 0) {
+    statusIA.textContent = '✅ IA executou ' + acoes.length + ' ação(ões)!';
+    
+    // Executa cada ação com um pequeno delay pra dar tempo de ver
+    for (let i = 0; i < acoes.length; i++) {
+      setTimeout(() => {
+        executarAcaoIA(acoes[i]);
+      }, i * 300); // 300ms entre cada ação
+    }
+  } else {
+    statusIA.textContent = '❌ Não foi possível processar o comando. Tente de novo.';
+  }
+
+  btnIA.disabled = false;
+  btnIA.textContent = '✨ IA';
+});
+
+// APERTAR ENTER NO CAMPO DE COMANDO TAMBÉM DISPARA
+comandoInput.addEventListener('keypress', (e) => {
+  if (e.key === 'Enter') btnIA.click();
+});
