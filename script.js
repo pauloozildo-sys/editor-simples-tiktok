@@ -112,8 +112,8 @@ textoInput.addEventListener('input', desenharPreview);
 function desenharPreview() {
   if (!videoAtual) return; // Verifica o vídeo
 
-  canvas.width = 1080;
-  canvas.height = 1350;
+  canvas.width = 1920;
+  canvas.height = 2560;
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   
@@ -244,7 +244,7 @@ document.getElementById('exportarBtn').addEventListener('click', async function(
     
     const mediaRecorder = new MediaRecorder(combinedStream, {
       mimeType: 'video/webm;codecs=vp8,opus',
-      videoBitsPerSecond: 3000000 
+      videoBitsPerSecond: 8000000 
     });
     
     let chunks = [];
