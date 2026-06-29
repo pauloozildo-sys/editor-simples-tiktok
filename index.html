@@ -52,13 +52,14 @@
   </div>
 
     <!-- ASSISTENTE IA -->
-<div style="margin-top: 20px; border-top: 1px solid #333; padding-top: 15px;">
-  <label style="color: #aaa; font-size: 14px;">🤖 Assistente IA:</label>
-  <div style="display: flex; gap: 8px; margin-top: 6px;">
-    <input type="text" id="comandoIA" placeholder="Ex: Coloca a taça no canto direito com texto emocionante..." style="flex: 1; padding: 10px; border-radius: 8px; border: none; background: #2a2a2a; color: #fff;">
-    <button id="btnIA" style="background: #8b5cf6; padding: 10px 18px; border: none; border-radius: 8px; color: #fff; font-weight: bold; cursor: pointer; white-space: nowrap;">✨ IA</button>
+<!-- ASSISTENTE IA (ESTILO TOKYO APARTMENT FIX) -->
+<div class="ia-container">
+  <label>🤖 Assistente IA</label>
+  <div class="ia-row">
+    <input type="text" id="comandoIA" placeholder="Ex: Coloca a taça no canto direito com texto emocionante...">
+    <button id="btnIA">✨ IA</button>
   </div>
-  <div id="statusIA" style="margin-top: 8px; font-size: 13px; color: #8b5cf6; min-height: 20px;"></div>
+  <div id="statusIA" class="ia-status">💡 Diga o que quer fazer no vídeo</div>
 </div>
 
   <div style="position: relative; width: 100%; max-width: 500px; margin: 0 auto;">
