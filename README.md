@@ -1,2 +1,2 @@
-# editor-simples-tiktok
-edição rápida de video e fotos para tik tok e outras redes sociais
+Este é um projeto pessoal e todos os direitos estão reservados. Não é permitida a modificação, distribuição ou uso comercial deste código.                           
+
