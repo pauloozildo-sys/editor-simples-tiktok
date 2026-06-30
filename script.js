@@ -466,3 +466,80 @@ comandoInput.addEventListener('keypress', (e) => {
   if (e.key === 'Enter') btnIA.click();
 });
 
+// =============================================
+// FUNÇÃO MÁGICA: TORNAR QUALQUER SELO ARRASTÁVEL
+// =============================================
+function fazerElementoArrastavel(elemento) {
+  let posInicialX = 0, posInicialY = 0;
+  let posAtualX = 0, posAtualY = 0;
+
+  // Suporta Mouse (Computador) e Touch (Celular)
+  elemento.addEventListener('mousedown', iniciarArrasto);
+  elemento.addEventListener('touchstart', iniciarArrasto, { passive: false });
+
+  function iniciarArrasto(e) {
+    // Evita comportamento padrão da imagem ser copiada
+    e.preventDefault(); 
+    
+    // Pega a posição inicial do clique/toque
+    if (e.type === 'touchstart') {
+      posInicialX = e.touches[0].clientX;
+      posInicialY = e.touches[0].clientY;
+    } else {
+      posInicialX = e.clientX;
+      posInicialY = e.clientY;
+    }
+    
+    // Ativa os ouvintes de movimento na tela inteira
+    document.addEventListener('mousemove', arrastando);
+    document.addEventListener('mouseup', pararArrasto);
+    document.addEventListener('touchmove', arrastando, { passive: false });
+    document.addEventListener('touchend', pararArrasto);
+  }
+
+  function arrastando(e) {
+    e.preventDefault();
+    
+    let clienteX, clienteY;
+    if (e.type === 'touchmove') {
+      clienteX = e.touches[0].clientX;
+      clienteY = e.touches[0].clientY;
+    } else {
+      clienteX = e.clientX;
+      clienteY = e.clientY;
+    }
+
+    // Calcula a distância que o dedo/mouse moveu
+    posAtualX = posInicialX - clienteX;
+    posAtualY = posInicialY - clienteY;
+    posInicialX = clienteX;
+    posInicialY = clienteY;
+
+    // Define a nova posição física do selo na tela
+    elemento.style.top = (elemento.offsetTop - posAtualY) + "px";
+    elemento.style.left = (elemento.offsetLeft - posAtualX) + "px";
+    
+    // Força o Canvas a redesenhar o selo na nova posição para o vídeo final!
+    desenharPreview();
+  }
+
+  function pararArrasto() {
+    // Remove os eventos quando solta o elemento
+    document.removeEventListener('mousemove', arrastando);
+    document.removeEventListener('mouseup', pararArrasto);
+    document.removeEventListener('touchmove', arrastando);
+    document.removeEventListener('touchend', pararArrasto);
+  }
+}
+
+// ====== APLICAR O ARRASTO EM TODOS OS SEUS SELOS ======
+const todosOsSelos = [
+  seloFCoracao, seloFTaca, seloBeijo, 
+  seloCoracaoNovo, seloJesus, seloTermometro, seloSol
+];
+
+// Ativa a mágica para cada um deles automaticamente se existirem!
+todosOsSelos.forEach(selo => {
+  if (selo) fazerElementoArrastavel(selo);
+});
+
