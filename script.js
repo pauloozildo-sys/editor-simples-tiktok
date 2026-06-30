@@ -542,4 +542,4 @@ const todosOsSelos = [
 todosOsSelos.forEach(selo => {
   if (selo) fazerElementoArrastavel(selo);
 });
-
+ 
