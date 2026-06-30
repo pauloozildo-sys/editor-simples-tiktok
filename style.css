@@ -142,3 +142,9 @@ canvas {
   min-height: 22px;
   font-style: italic;
 }
+
+/* Diz para o usuário que o elemento pode ser movido */
+.emojiBtn, #previewCanvas ~ img {
+  cursor: move;
+  user-select: none;
+}
