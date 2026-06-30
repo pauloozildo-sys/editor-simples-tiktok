@@ -1,13 +1,19 @@
-const imagemInput = document.getElementById('imagemInput'); // Mantém o id do HTML
+const imagemInput = document.getElementById('imagemInput'); 
 const audioInput = document.getElementById('audioInput');
 const textoInput = document.getElementById('textoInput');
 const canvas = document.getElementById('previewCanvas');
 const ctx = canvas.getContext('2d');
 
-// Controlar a exibição dos selos por cima do Canvas
+// ====== DECLARAÇÃO DE TODOS OS SELOS (No topo para não dar erro!) ======
 const seloFCoracao = document.getElementById('seloFlutuanteCoracao');
 const seloFTaca = document.getElementById('seloFlutuanteTaca');
+const seloBeijo = document.getElementById('seloFlutuanteBeijo');
+const seloCoracaoNovo = document.getElementById('seloFlutuanteCoracaoNovo');
+const seloJesus = document.getElementById('seloFlutuanteJesus');
+const seloTermometro = document.getElementById('seloFlutuanteTermometro');
+const seloSol = document.getElementById('seloFlutuanteSol');
 
+// ====== EVENTOS DOS BOTÕES DOS SELOS ANTIGOS ======
 document.getElementById('btnFiltroCoracao').addEventListener('click', () => {
   if (seloFCoracao.style.display === 'none' || seloFCoracao.style.display === '') {
     seloFCoracao.style.display = 'block';
@@ -26,11 +32,40 @@ document.getElementById('btnFiltroTaca').addEventListener('click', () => {
   desenharPreview();
 });
 
-let videoAtual = null; // 🎬 Mudamos de imagemAtual para videoAtual
+// ====== FUNÇÃO E EVENTOS DOS NOVOS SELOS ======
+function toggleSelo(elemento, botao) {
+  if (!elemento) return;
+  if (elemento.style.display === 'none' || elemento.style.display === '') {
+    elemento.style.display = 'block';
+    if(botao) botao.style.border = '3px solid #ff2d75';
+  } else {
+    elemento.style.display = 'none';
+    if(botao) botao.style.border = 'none';
+  }
+  desenharPreview();
+}
+
+if(document.getElementById('btnSeloBeijo')) {
+  document.getElementById('btnSeloBeijo').addEventListener('click', function() { toggleSelo(seloBeijo, this); });
+}
+if(document.getElementById('btnSeloCoracaoNovo')) {
+  document.getElementById('btnSeloCoracaoNovo').addEventListener('click', function() { toggleSelo(seloCoracaoNovo, this); });
+}
+if(document.getElementById('btnSeloJesus')) {
+  document.getElementById('btnSeloJesus').addEventListener('click', function() { toggleSelo(seloJesus, this); });
+}
+if(document.getElementById('btnSeloTermometro')) {
+  document.getElementById('btnSeloTermometro').addEventListener('click', function() { toggleSelo(seloTermometro, this); });
+}
+if(document.getElementById('btnSeloSol')) {
+  document.getElementById('btnSeloSol').addEventListener('click', function() { toggleSelo(seloSol, this); });
+}
+
+
+let videoAtual = null; 
 let audioURL = null;
 let loopPreview = null;
 
-// Posições e alinhamento
 let posicao = 'center';
 let alinhamento = 'center';
 
@@ -69,7 +104,7 @@ document.querySelectorAll('.emojiBtn').forEach(emoji => {
   });
 });
 
-// ---------- 🎬 UPLOAD DE VÍDEO (ADAPTADO) ----------
+// ---------- UPLOAD DE VÍDEO ----------
 imagemInput.addEventListener('change', (e) => {
   const file = e.target.files[0];
   if (!file) return;
@@ -77,7 +112,7 @@ imagemInput.addEventListener('change', (e) => {
   const video = document.createElement('video');
   video.crossOrigin = "anonymous";
   video.src = URL.createObjectURL(file);
-  video.muted = true; // Necessário para o navegador permitir o play via código
+  video.muted = true; 
   video.autoplay = true;
   video.loop = true;
   video.playsInline = true;
@@ -87,137 +122,78 @@ imagemInput.addEventListener('change', (e) => {
     videoAtual = video;
     video.play().then(() => {
       if (loopPreview) cancelAnimationFrame(loopPreview);
-      atualizarCanvasLoop(); // Inicia o fluxo de frames do vídeo na tela
+      atualizarCanvasLoop(); 
     });
   };
 });
 
-// Mantém o canvas atualizando conforme o vídeo roda
 function atualizarCanvasLoop() {
   if (!videoAtual) return;
   desenharPreview();
   loopPreview = requestAnimationFrame(atualizarCanvasLoop);
 }
 
-// ---------- UPLOAD DE ÁUDIO ----------
 audioInput.addEventListener('change', (e) => {
   const file = e.target.files[0];
   if (file) audioURL = URL.createObjectURL(file);
 });
 
-// ---------- TEXTO DIGITADO ----------
 textoInput.addEventListener('input', desenharPreview);
 
 // ---------- FUNÇÃO PRINCIPAL: DESENHAR ----------
 function desenharPreview() {
-  if (!videoAtual) return; // Verifica o vídeo
+  if (!videoAtual) return; 
 
-  canvas.width = 1920;
-  canvas.height = 2760;
+  canvas.width = 1080;   // Mantive o padrão original estável para Reels/TikTok
+  canvas.height = 1350;
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   
-  // 1. Desenha o frame atual do vídeo no Canvas
   ctx.drawImage(videoAtual, 0, 0, canvas.width, canvas.height);
 
-  // 2. CARIMBA OS SELOS NO CANVAS PARA GRAVAÇÃO FINAL
-  const tamSelo = 180; // Tamanho ideal para aparecer no vídeo exportado
-
+  // Carimbo dos Selos Antigos
+  const tamSelo = 140; 
   if (seloFCoracao && seloFCoracao.style.display === 'block') {
     ctx.drawImage(seloFCoracao, 60, 60, tamSelo, tamSelo);
   }
-
   if (seloFTaca && seloFTaca.style.display === 'block') {
     const posX = canvas.width - tamSelo - 60;
-    ctx.drawImage(seloFTaca, posX, 60, tamSelo, tamSelo);                                                                                                          
+    ctx.drawImage(seloFTaca, posX, 60, tamSelo, tamSelo);                                                                                                                                                                                  
   }
-  // ---------- DESENHAR SELOS NO CANVAS ----------
-const tamSelo = 140;
 
-if (seloBeijo && seloBeijo.style.display === 'block') {
-  ctx.drawImage(seloBeijo, 60, 60, tamSelo, tamSelo);
-}
-if (seloCoracaoNovo && seloCoracaoNovo.style.display === 'block') {
-  ctx.drawImage(seloCoracaoNovo, 220, 60, tamSelo, tamSelo);
-}
-if (seloJesus && seloJesus.style.display === 'block') {
-  const posX = canvas.width - tamSelo - 60;
-  ctx.drawImage(seloJesus, posX, 60, tamSelo, tamSelo);
-}
-if (seloTermometro && seloTermometro.style.display === 'block') {
-  ctx.drawImage(seloTermometro, 60, canvas.height - tamSelo - 60, tamSelo, tamSelo);
-}
-if (seloSol && seloSol.style.display === 'block') {
-  const posX = canvas.width - tamSelo - 60;
-  ctx.drawImage(seloSol, posX, canvas.height - tamSelo - 60, tamSelo, tamSelo);
-}
-  // ---------- NOVOS SELOS ----------
-const seloBeijo = document.getElementById('seloFlutuanteBeijo');
-const seloCoracaoNovo = document.getElementById('seloFlutuanteCoracaoNovo');
-const seloJesus = document.getElementById('seloFlutuanteJesus');
-const seloTermometro = document.getElementById('seloFlutuanteTermometro');
-const seloSol = document.getElementById('seloFlutuanteSol');
-
-// Função genérica pra ativar/desativar selos
-function toggleSelo(elemento, botao) {
-  if (elemento.style.display === 'none' || elemento.style.display === '') {
-    elemento.style.display = 'block';
-    botao.style.border = '3px solid #ff2d75';
-  } else {
-    elemento.style.display = 'none';
-    botao.style.border = 'none';
+  // Carimbo dos Selos Novos (Garante que existem na tela antes de desenhar)
+  if (seloBeijo && seloBeijo.style.display === 'block') {
+    ctx.drawImage(seloBeijo, 60, 220, tamSelo, tamSelo); // Ajustado o Y para não sobrepor o coração
   }
-  desenharPreview();
-}
-
-// Eventos dos novos selos
-document.getElementById('btnSeloBeijo').addEventListener('click', function() {
-  toggleSelo(seloBeijo, this);
-});
-
-document.getElementById('btnSeloCoracaoNovo').addEventListener('click', function() {
-  toggleSelo(seloCoracaoNovo, this);
-});
-
-document.getElementById('btnSeloJesus').addEventListener('click', function() {
-  toggleSelo(seloJesus, this);
-});
-
-document.getElementById('btnSeloTermometro').addEventListener('click', function() {
-  toggleSelo(seloTermometro, this);
-});
-
-document.getElementById('btnSeloSol').addEventListener('click', function() {
-  toggleSelo(seloSol, this);
-});
+  if (seloCoracaoNovo && seloCoracaoNovo.style.display === 'block') {
+    ctx.drawImage(seloCoracaoNovo, 220, 220, tamSelo, tamSelo);
+  }
+  if (seloJesus && seloJesus.style.display === 'block') {
+    const posX = canvas.width - tamSelo - 60;
+    ctx.drawImage(seloJesus, posX, 220, tamSelo, tamSelo);
+  }
+  if (seloTermometro && seloTermometro.style.display === 'block') {
+    ctx.drawImage(seloTermometro, 60, canvas.height - tamSelo - 60, tamSelo, tamSelo);
+  }
+  if (seloSol && seloSol.style.display === 'block') {
+    const posX = canvas.width - tamSelo - 60;
+    ctx.drawImage(seloSol, posX, canvas.height - tamSelo - 60, tamSelo, tamSelo);
+  }
 
   // 3. DESENHA O TEXTO
   const texto = textoInput.value || 'VOCÊ VAI AMAR ISSO';
-
-  // Configurações de alinhamento
   ctx.textAlign = alinhamento;
   ctx.textBaseline = 'middle';
 
-  // Calcula posição X e Y
   let x, y;
-  const margin = 120; // Margem ajustada para ficar perfeita no Reels/TikTok
+  const margin = 120; 
 
   switch (posicao) {
-    case 'top':
-      y = margin;
-      break;
-    case 'center':
-      y = canvas.height / 2;
-      break;
-    case 'bottom':
-      y = canvas.height - margin;
-      break;
-    case 'corner':
-      y = canvas.height - margin;
-      x = canvas.width - margin;
-      break;
-    default:
-      y = canvas.height / 2;
+    case 'top': y = margin; break;
+    case 'center': y = canvas.height / 2; break;
+    case 'bottom': y = canvas.height - margin; break;
+    case 'corner': y = canvas.height - margin; x = canvas.width - margin; break;
+    default: y = canvas.height / 2;
   }
 
   if (posicao === 'corner') {
@@ -231,25 +207,24 @@ document.getElementById('btnSeloSol').addEventListener('click', function() {
     else x = canvas.width / 2;
   }
 
-  // Estilo do texto
   ctx.font = 'bold 85px Arial';
   ctx.shadowColor = 'black';
   ctx.shadowBlur = 20;
   ctx.shadowOffsetX = 3;
   ctx.shadowOffsetY = 3;
 
-  // Contorno
   ctx.strokeStyle = 'black';
   ctx.lineWidth = 12;
   ctx.strokeText(texto, x, y);
 
-  // Preenchimento
   ctx.shadowBlur = 0;
   ctx.shadowOffsetX = 0;
   ctx.shadowOffsetY = 0;
   ctx.fillStyle = 'white';
   ctx.fillText(texto, x, y);
 }
+
+// O restante do seu script (Exportar e IA) continua idêntico aqui para baixo...
 
 // ---------- EXPORTAR VÍDEO (VERSÃO FINAL DINÂMICA) ----------
 document.getElementById('exportarBtn').addEventListener('click', async function(e) {
