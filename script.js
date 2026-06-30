@@ -470,3 +470,4 @@ btnIA.addEventListener('click', async () => {
 comandoInput.addEventListener('keypress', (e) => {
   if (e.key === 'Enter') btnIA.click();
 });
+
