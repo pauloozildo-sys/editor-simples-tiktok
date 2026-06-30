@@ -113,7 +113,7 @@ function desenharPreview() {
   if (!videoAtual) return; // Verifica o vídeo
 
   canvas.width = 1920;
-  canvas.height = 2560;
+  canvas.height = 2760;
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   
@@ -121,7 +121,7 @@ function desenharPreview() {
   ctx.drawImage(videoAtual, 0, 0, canvas.width, canvas.height);
 
   // 2. CARIMBA OS SELOS NO CANVAS PARA GRAVAÇÃO FINAL
-  const tamSelo = 140; // Tamanho ideal para aparecer no vídeo exportado
+  const tamSelo = 180; // Tamanho ideal para aparecer no vídeo exportado
 
   if (seloFCoracao && seloFCoracao.style.display === 'block') {
     ctx.drawImage(seloFCoracao, 60, 60, tamSelo, tamSelo);
@@ -129,8 +129,47 @@ function desenharPreview() {
 
   if (seloFTaca && seloFTaca.style.display === 'block') {
     const posX = canvas.width - tamSelo - 60;
-    ctx.drawImage(seloFTaca, posX, 60, tamSelo, tamSelo);
+    ctx.drawImage(seloFTaca, posX, 60, tamSelo, tamSelo);                                                                                                          
   }
+  // ---------- NOVOS SELOS ----------
+const seloBeijo = document.getElementById('seloFlutuanteBeijo');
+const seloCoracaoNovo = document.getElementById('seloFlutuanteCoracaoNovo');
+const seloJesus = document.getElementById('seloFlutuanteJesus');
+const seloTermometro = document.getElementById('seloFlutuanteTermometro');
+const seloSol = document.getElementById('seloFlutuanteSol');
+
+// Função genérica pra ativar/desativar selos
+function toggleSelo(elemento, botao) {
+  if (elemento.style.display === 'none' || elemento.style.display === '') {
+    elemento.style.display = 'block';
+    botao.style.border = '3px solid #ff2d75';
+  } else {
+    elemento.style.display = 'none';
+    botao.style.border = 'none';
+  }
+  desenharPreview();
+}
+
+// Eventos dos novos selos
+document.getElementById('btnSeloBeijo').addEventListener('click', function() {
+  toggleSelo(seloBeijo, this);
+});
+
+document.getElementById('btnSeloCoracaoNovo').addEventListener('click', function() {
+  toggleSelo(seloCoracaoNovo, this);
+});
+
+document.getElementById('btnSeloJesus').addEventListener('click', function() {
+  toggleSelo(seloJesus, this);
+});
+
+document.getElementById('btnSeloTermometro').addEventListener('click', function() {
+  toggleSelo(seloTermometro, this);
+});
+
+document.getElementById('btnSeloSol').addEventListener('click', function() {
+  toggleSelo(seloSol, this);
+});
 
   // 3. DESENHA O TEXTO
   const texto = textoInput.value || 'VOCÊ VAI AMAR ISSO';
