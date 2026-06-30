@@ -131,6 +131,26 @@ function desenharPreview() {
     const posX = canvas.width - tamSelo - 60;
     ctx.drawImage(seloFTaca, posX, 60, tamSelo, tamSelo);                                                                                                          
   }
+  // ---------- DESENHAR SELOS NO CANVAS ----------
+const tamSelo = 140;
+
+if (seloBeijo && seloBeijo.style.display === 'block') {
+  ctx.drawImage(seloBeijo, 60, 60, tamSelo, tamSelo);
+}
+if (seloCoracaoNovo && seloCoracaoNovo.style.display === 'block') {
+  ctx.drawImage(seloCoracaoNovo, 220, 60, tamSelo, tamSelo);
+}
+if (seloJesus && seloJesus.style.display === 'block') {
+  const posX = canvas.width - tamSelo - 60;
+  ctx.drawImage(seloJesus, posX, 60, tamSelo, tamSelo);
+}
+if (seloTermometro && seloTermometro.style.display === 'block') {
+  ctx.drawImage(seloTermometro, 60, canvas.height - tamSelo - 60, tamSelo, tamSelo);
+}
+if (seloSol && seloSol.style.display === 'block') {
+  const posX = canvas.width - tamSelo - 60;
+  ctx.drawImage(seloSol, posX, canvas.height - tamSelo - 60, tamSelo, tamSelo);
+}
   // ---------- NOVOS SELOS ----------
 const seloBeijo = document.getElementById('seloFlutuanteBeijo');
 const seloCoracaoNovo = document.getElementById('seloFlutuanteCoracaoNovo');
