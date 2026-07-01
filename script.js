@@ -266,7 +266,7 @@ document.getElementById('exportarBtn').addEventListener('click', async function(
     const combinedStream = new MediaStream([videoTrack, audioTrack]);
     const mediaRecorder = new MediaRecorder(combinedStream, {
       mimeType: 'video/webm;codecs=vp8,opus',
-      videoBitsPerSecond: 8000000 
+      videoBitsPerSecond: 16000000 
     });
     
     let chunks = [];
@@ -279,7 +279,7 @@ document.getElementById('exportarBtn').addEventListener('click', async function(
       estaExportando = false; 
       desenharPreview();
 
-      const blob = new Blob(chunks, { type: 'video/webm' });
+      const blob = new Blob(chunks, { type: 'video/mp4' });
       const url = URL.createObjectURL(blob);
       
       const videoPreview = document.getElementById('videoPreview');
@@ -290,7 +290,7 @@ document.getElementById('exportarBtn').addEventListener('click', async function(
       
       const link = document.createElement('a');
       link.href = url;
-      link.download = 'video-para-minha-mae.webm';
+      link.download = 'video-para-minha-mae.mp4';
       link.click();
       
       btn.textContent = textoOriginal;
