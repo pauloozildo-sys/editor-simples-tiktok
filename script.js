@@ -13,6 +13,17 @@ const seloJesus = document.getElementById('seloFlutuanteJesus');
 const seloTermometro = document.getElementById('seloFlutuanteTermometro');
 const seloSol = document.getElementById('seloFlutuanteSol');
 
+// No início do script, depois de declarar os selos
+window.posicoesSelos = {
+  coracao: { x: 60, y: 60 },
+  taca: { x: canvas.width - 140 - 60, y: 60 },
+  beijo: { x: 60, y: 220 },
+  coracaoNovo: { x: 220, y: 220 },
+  jesus: { x: canvas.width - 140 - 60, y: 220 },
+  termometro: { x: 60, y: canvas.height - 140 - 60 },
+  sol: { x: canvas.width - 140 - 60, y: canvas.height - 140 - 60 }
+};
+
 // ====== EVENTOS DOS BOTÕES DOS SELOS ANTIGOS ======
 document.getElementById('btnFiltroCoracao').addEventListener('click', () => {
   if (seloFCoracao.style.display === 'none' || seloFCoracao.style.display === '') {
@@ -152,32 +163,33 @@ function desenharPreview() {
   ctx.drawImage(videoAtual, 0, 0, canvas.width, canvas.height);
 
   // Carimbo dos Selos Antigos
-  const tamSelo = 140; 
-  if (seloFCoracao && seloFCoracao.style.display === 'block') {
-    ctx.drawImage(seloFCoracao, 60, 60, tamSelo, tamSelo);
-  }
-  if (seloFTaca && seloFTaca.style.display === 'block') {
-    const posX = canvas.width - tamSelo - 60;
-    ctx.drawImage(seloFTaca, posX, 60, tamSelo, tamSelo);                                                                                                                                                                                  
-  }
+  // ---------- CARIMBAR SELOS COM POSIÇÃO DINÂMICA ----------
+const tamSelo = 140;
 
-  // Carimbo dos Selos Novos (Garante que existem na tela antes de desenhar)
-  if (seloBeijo && seloBeijo.style.display === 'block') {
-    ctx.drawImage(seloBeijo, 60, 220, tamSelo, tamSelo); // Ajustado o Y para não sobrepor o coração
+// Função auxiliar para desenhar selo na posição salva ou padrão
+function desenharSelo(elemento, nome, xPadrao, yPadrao) {
+  if (!elemento || elemento.style.display !== 'block') return;
+  
+  let x = xPadrao;
+  let y = yPadrao;
+  
+  // Se o usuário já moveu, usa a posição salva
+  if (window.posicoesSelos && window.posicoesSelos[nome]) {
+    x = window.posicoesSelos[nome].x;
+    y = window.posicoesSelos[nome].y;
   }
-  if (seloCoracaoNovo && seloCoracaoNovo.style.display === 'block') {
-    ctx.drawImage(seloCoracaoNovo, 220, 220, tamSelo, tamSelo);
-  }
-  if (seloJesus && seloJesus.style.display === 'block') {
-    const posX = canvas.width - tamSelo - 60;
-    ctx.drawImage(seloJesus, posX, 220, tamSelo, tamSelo);
-  }
-  if (seloTermometro && seloTermometro.style.display === 'block') {
-    ctx.drawImage(seloTermometro, 60, canvas.height - tamSelo - 60, tamSelo, tamSelo);
-  }
-  if (seloSol && seloSol.style.display === 'block') {
-    const posX = canvas.width - tamSelo - 60;
-    ctx.drawImage(seloSol, posX, canvas.height - tamSelo - 60, tamSelo, tamSelo);
+  
+  ctx.drawImage(elemento, x, y, tamSelo, tamSelo);
+}
+
+// Desenha cada selo com sua posição dinâmica
+desenharSelo(seloFCoracao, 'coracao', 60, 60);
+desenharSelo(seloFTaca, 'taca', canvas.width - tamSelo - 60, 60);
+desenharSelo(seloBeijo, 'beijo', 60, 220);
+desenharSelo(seloCoracaoNovo, 'coracaoNovo', 220, 220);
+desenharSelo(seloJesus, 'jesus', canvas.width - tamSelo - 60, 220);
+desenharSelo(seloTermometro, 'termometro', 60, canvas.height - tamSelo - 60);
+desenharSelo(seloSol, 'sol', canvas.width - tamSelo - 60, canvas.height - tamSelo - 60);Selo, tamSelo);
   }
 
   // 3. DESENHA O TEXTO
@@ -469,19 +481,20 @@ comandoInput.addEventListener('keypress', (e) => {
 // =============================================
 // FUNÇÃO MÁGICA: TORNAR QUALQUER SELO ARRASTÁVEL
 // =============================================
-function fazerElementoArrastavel(elemento) {
+// =============================================
+// FUNÇÃO MÁGICA: TORNAR QUALQUER SELO ARRASTÁVEL (COM CANVAS)
+// =============================================
+function fazerElementoArrastavel(elemento, nome) {
   let posInicialX = 0, posInicialY = 0;
   let posAtualX = 0, posAtualY = 0;
 
-  // Suporta Mouse (Computador) e Touch (Celular)
+  // --- Suporte Mouse e Touch ---
   elemento.addEventListener('mousedown', iniciarArrasto);
   elemento.addEventListener('touchstart', iniciarArrasto, { passive: false });
 
   function iniciarArrasto(e) {
-    // Evita comportamento padrão da imagem ser copiada
-    e.preventDefault(); 
+    e.preventDefault();
     
-    // Pega a posição inicial do clique/toque
     if (e.type === 'touchstart') {
       posInicialX = e.touches[0].clientX;
       posInicialY = e.touches[0].clientY;
@@ -490,7 +503,6 @@ function fazerElementoArrastavel(elemento) {
       posInicialY = e.clientY;
     }
     
-    // Ativa os ouvintes de movimento na tela inteira
     document.addEventListener('mousemove', arrastando);
     document.addEventListener('mouseup', pararArrasto);
     document.addEventListener('touchmove', arrastando, { passive: false });
@@ -509,22 +521,32 @@ function fazerElementoArrastavel(elemento) {
       clienteY = e.clientY;
     }
 
-    // Calcula a distância que o dedo/mouse moveu
     posAtualX = posInicialX - clienteX;
     posAtualY = posInicialY - clienteY;
     posInicialX = clienteX;
     posInicialY = clienteY;
 
-    // Define a nova posição física do selo na tela
+    // Move o elemento na tela
     elemento.style.top = (elemento.offsetTop - posAtualY) + "px";
     elemento.style.left = (elemento.offsetLeft - posAtualX) + "px";
     
-    // Força o Canvas a redesenhar o selo na nova posição para o vídeo final!
+    // ATUALIZA AS COORDENADAS NO OBJETO GLOBAL
+    if (!window.posicoesSelos) window.posicoesSelos = {};
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    
+    // Calcula a posição relativa ao canvas em pixels do canvas
+    const canvasX = (elemento.offsetLeft - rect.left) * scaleX;
+    const canvasY = (elemento.offsetTop - rect.top) * scaleY;
+    
+    window.posicoesSelos[nome] = { x: canvasX, y: canvasY };
+    
+    // Força o canvas a redesenhar
     desenharPreview();
   }
 
   function pararArrasto() {
-    // Remove os eventos quando solta o elemento
     document.removeEventListener('mousemove', arrastando);
     document.removeEventListener('mouseup', pararArrasto);
     document.removeEventListener('touchmove', arrastando);
@@ -534,12 +556,15 @@ function fazerElementoArrastavel(elemento) {
 
 // ====== APLICAR O ARRASTO EM TODOS OS SEUS SELOS ======
 const todosOsSelos = [
-  seloFCoracao, seloFTaca, seloBeijo, 
-  seloCoracaoNovo, seloJesus, seloTermometro, seloSol
+  { el: seloFCoracao, nome: 'coracao' },
+  { el: seloFTaca, nome: 'taca' },
+  { el: seloBeijo, nome: 'beijo' },
+  { el: seloCoracaoNovo, nome: 'coracaoNovo' },
+  { el: seloJesus, nome: 'jesus' },
+  { el: seloTermometro, nome: 'termometro' },
+  { el: seloSol, nome: 'sol' }
 ];
 
-// Ativa a mágica para cada um deles automaticamente se existirem!
-todosOsSelos.forEach(selo => {
-  if (selo) fazerElementoArrastavel(selo);
+todosOsSelos.forEach(item => {
+  if (item.el) fazerElementoArrastavel(item.el, item.nome);
 });
- 
