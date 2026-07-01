@@ -159,3 +159,12 @@ canvas {
   cursor: move;
   user-select: none;
 }
+
+/* No CSS, defina os selos como transparentes e sem interação de clique, 
+   já que o arraste vai mexer no canvas renderizado */
+#seloFlutuanteCoracao, #seloFlutuanteTaca, #seloFlutuanteBeijo, 
+#seloFlutuanteCoracaoNovo, #seloFlutuanteJesus, 
+#seloFlutuanteTermometro, #seloFlutuanteSol {
+  opacity: 0; /* Fica invisível para o olho humano */
+  pointer-events: none; /* O clique passa direto para o canvas */
+}
