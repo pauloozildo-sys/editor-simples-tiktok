@@ -13,6 +13,10 @@ const seloJesus = document.getElementById('seloFlutuanteJesus');
 const seloTermometro = document.getElementById('seloFlutuanteTermometro');
 const seloSol = document.getElementById('seloFlutuanteSol');
 
+[seloFCoracao, seloFTaca, seloBeijo, seloCoracaoNovo, seloJesus, seloTermometro, seloSol].forEach(img => {
+  img.crossOrigin = "anonymous";
+});
+
 // No início do script, depois de declarar os selos
 window.posicoesSelos = {
   coracao: { x: 60, y: 60 },
