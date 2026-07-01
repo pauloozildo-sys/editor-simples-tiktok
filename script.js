@@ -72,7 +72,6 @@ if(document.getElementById('btnSeloSol')) {
   document.getElementById('btnSeloSol').addEventListener('click', function() { toggleSelo(seloSol, this); });
 }
 
-
 let videoAtual = null; 
 let audioURL = null;
 let loopPreview = null;
@@ -164,33 +163,32 @@ function desenharPreview() {
 
   // Carimbo dos Selos Antigos
   // ---------- CARIMBAR SELOS COM POSIÇÃO DINÂMICA ----------
-const tamSelo = 140;
+  const tamSelo = 140;
 
-// Função auxiliar para desenhar selo na posição salva ou padrão
-function desenharSelo(elemento, nome, xPadrao, yPadrao) {
-  if (!elemento || elemento.style.display !== 'block') return;
-  
-  let x = xPadrao;
-  let y = yPadrao;
-  
-  // Se o usuário já moveu, usa a posição salva
-  if (window.posicoesSelos && window.posicoesSelos[nome]) {
-    x = window.posicoesSelos[nome].x;
-    y = window.posicoesSelos[nome].y;
+  // Função auxiliar para desenhar selo na posição salva ou padrão
+  function desenharSelo(elemento, nome, xPadrao, yPadrao) {
+    if (!elemento || elemento.style.display !== 'block') return;
+    
+    let x = xPadrao;
+    let y = yPadrao;
+    
+    // Se o usuário já moveu, usa a posição salva
+    if (window.posicoesSelos && window.posicoesSelos[nome]) {
+      x = window.posicoesSelos[nome].x;
+      y = window.posicoesSelos[nome].y;
+    }
+    
+    ctx.drawImage(elemento, x, y, tamSelo, tamSelo);
   }
-  
-  ctx.drawImage(elemento, x, y, tamSelo, tamSelo);
-}
 
-// Desenha cada selo com sua posição dinâmica
-desenharSelo(seloFCoracao, 'coracao', 60, 60);
-desenharSelo(seloFTaca, 'taca', canvas.width - tamSelo - 60, 60);
-desenharSelo(seloBeijo, 'beijo', 60, 220);
-desenharSelo(seloCoracaoNovo, 'coracaoNovo', 220, 220);
-desenharSelo(seloJesus, 'jesus', canvas.width - tamSelo - 60, 220);
-desenharSelo(seloTermometro, 'termometro', 60, canvas.height - tamSelo - 60);
-desenharSelo(seloSol, 'sol', canvas.width - tamSelo - 60, canvas.height - tamSelo - 60);Selo, tamSelo);
-  }
+  // Desenha cada selo com sua posição dinâmica
+  desenharSelo(seloFCoracao, 'coracao', 60, 60);
+  desenharSelo(seloFTaca, 'taca', canvas.width - tamSelo - 60, 60);
+  desenharSelo(seloBeijo, 'beijo', 60, 220);
+  desenharSelo(seloCoracaoNovo, 'coracaoNovo', 220, 220);
+  desenharSelo(seloJesus, 'jesus', canvas.width - tamSelo - 60, 220);
+  desenharSelo(seloTermometro, 'termometro', 60, canvas.height - tamSelo - 60);
+  desenharSelo(seloSol, 'sol', canvas.width - tamSelo - 60, canvas.height - tamSelo - 60);
 
   // 3. DESENHA O TEXTO
   const texto = textoInput.value || 'VOCÊ VAI AMAR ISSO';
@@ -235,8 +233,6 @@ desenharSelo(seloSol, 'sol', canvas.width - tamSelo - 60, canvas.height - tamSel
   ctx.fillStyle = 'white';
   ctx.fillText(texto, x, y);
 }
-
-// O restante do seu script (Exportar e IA) continua idêntico aqui para baixo...
 
 // ---------- EXPORTAR VÍDEO (VERSÃO FINAL DINÂMICA) ----------
 document.getElementById('exportarBtn').addEventListener('click', async function(e) {
@@ -349,7 +345,6 @@ const comandoInput = document.getElementById('comandoIA');
 const btnIA = document.getElementById('btnIA');
 const statusIA = document.getElementById('statusIA');
 
-// FUNÇÃO PARA EXECUTAR A AÇÃO NO EDITOR
 function executarAcaoIA(acao) {
   switch (acao.acao) {
     case 'texto':
@@ -358,7 +353,6 @@ function executarAcaoIA(acao) {
       break;
 
     case 'posicao':
-      // Clica no botão de posição correspondente
       const posBtn = document.querySelector(`.posBtn[data-pos="${acao.valor}"]`);
       if (posBtn) posBtn.click();
       break;
@@ -373,7 +367,6 @@ function executarAcaoIA(acao) {
         ? document.getElementById('btnFiltroCoracao')
         : document.getElementById('btnFiltroTaca');
       
-      // Verifica se o selo já está ativo e só clica se precisar
       const seloImg = acao.qual === 'coracao' 
         ? document.getElementById('seloFlutuanteCoracao')
         : document.getElementById('seloFlutuanteTaca');
@@ -387,9 +380,8 @@ function executarAcaoIA(acao) {
   }
 }
 
-// FUNÇÃO PARA CHAMAR A IA
 async function chamarIA(comando) {
-  const CHAVE_API = 'SUA_CHAVE_AQUI'; // <-- COLOQUE SUA CHAVE
+  const CHAVE_API = 'SUA_CHAVE_AQUI'; 
 
   try {
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -424,12 +416,10 @@ async function chamarIA(comando) {
     const data = await response.json();
     const conteudo = data.choices[0].message.content;
     
-    // Tenta parsear o JSON
     try {
       const acoes = JSON.parse(conteudo);
       return Array.isArray(acoes) ? acoes : [acoes];
     } catch {
-      // Se não for JSON, tenta extrair com regex
       const match = conteudo.match(/\[.*\]/s);
       if (match) return JSON.parse(match[0]);
       throw new Error('Resposta da IA não é um JSON válido');
@@ -441,7 +431,6 @@ async function chamarIA(comando) {
   }
 }
 
-// EVENTO DO BOTÃO IA
 btnIA.addEventListener('click', async () => {
   const comando = comandoInput.value.trim();
   if (!comando) {
@@ -449,7 +438,6 @@ btnIA.addEventListener('click', async () => {
     return;
   }
 
-  // Desabilita o botão enquanto processa
   btnIA.disabled = true;
   btnIA.textContent = '⏳ Pensando...';
   statusIA.textContent = '🤖 IA está processando seu pedido...';
@@ -459,11 +447,10 @@ btnIA.addEventListener('click', async () => {
   if (acoes && acoes.length > 0) {
     statusIA.textContent = '✅ IA executou ' + acoes.length + ' ação(ões)!';
     
-    // Executa cada ação com um pequeno delay pra dar tempo de ver
     for (let i = 0; i < acoes.length; i++) {
       setTimeout(() => {
         executarAcaoIA(acoes[i]);
-      }, i * 300); // 300ms entre cada ação
+      }, i * 300); 
     }
   } else {
     statusIA.textContent = '❌ Não foi possível processar o comando. Tente de novo.';
@@ -473,14 +460,10 @@ btnIA.addEventListener('click', async () => {
   btnIA.textContent = '✨ IA';
 });
 
-// APERTAR ENTER NO CAMPO DE COMANDO TAMBÉM DISPARA
 comandoInput.addEventListener('keypress', (e) => {
   if (e.key === 'Enter') btnIA.click();
 });
 
-// =============================================
-// FUNÇÃO MÁGICA: TORNAR QUALQUER SELO ARRASTÁVEL
-// =============================================
 // =============================================
 // FUNÇÃO MÁGICA: TORNAR QUALQUER SELO ARRASTÁVEL (COM CANVAS)
 // =============================================
@@ -488,7 +471,6 @@ function fazerElementoArrastavel(elemento, nome) {
   let posInicialX = 0, posInicialY = 0;
   let posAtualX = 0, posAtualY = 0;
 
-  // --- Suporte Mouse e Touch ---
   elemento.addEventListener('mousedown', iniciarArrasto);
   elemento.addEventListener('touchstart', iniciarArrasto, { passive: false });
 
@@ -526,23 +508,19 @@ function fazerElementoArrastavel(elemento, nome) {
     posInicialX = clienteX;
     posInicialY = clienteY;
 
-    // Move o elemento na tela
     elemento.style.top = (elemento.offsetTop - posAtualY) + "px";
     elemento.style.left = (elemento.offsetLeft - posAtualX) + "px";
     
-    // ATUALIZA AS COORDENADAS NO OBJETO GLOBAL
     if (!window.posicoesSelos) window.posicoesSelos = {};
     const rect = canvas.getBoundingClientRect();
     const scaleX = canvas.width / rect.width;
     const scaleY = canvas.height / rect.height;
     
-    // Calcula a posição relativa ao canvas em pixels do canvas
     const canvasX = (elemento.offsetLeft - rect.left) * scaleX;
     const canvasY = (elemento.offsetTop - rect.top) * scaleY;
     
     window.posicoesSelos[nome] = { x: canvasX, y: canvasY };
     
-    // Força o canvas a redesenhar
     desenharPreview();
   }
 
