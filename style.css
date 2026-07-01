@@ -41,6 +41,9 @@ button:hover {
 
 canvas {
   width: 100%;
+  max-width: 400px;
+  height: auto;
+  aspect-ratio: 1080 / 1350;
   border-radius: 12px;
   margin: 10px 0;
   background: #000;
@@ -56,6 +59,7 @@ canvas {
   cursor: pointer;
   transition: 0.2s;
   flex: 1;
+  min-width: 60px;
 }
 
 .posBtn:hover, .alignBtn:hover {
@@ -71,6 +75,7 @@ canvas {
   transition: 0.2s;
   padding: 5px;
   border-radius: 10px;
+  cursor: pointer;
 }
 
 .emojiBtn:hover {
@@ -143,8 +148,14 @@ canvas {
   font-style: italic;
 }
 
-/* Diz para o usuário que o elemento pode ser movido */
-.emojiBtn, #previewCanvas ~ img {
+/* AQUI ESTÁ A CORREÇÃO DOS SELOS ARRASTÁVEIS */
+#seloFlutuanteCoracao, 
+#seloFlutuanteTaca, 
+#seloFlutuanteBeijo, 
+#seloFlutuanteCoracaoNovo, 
+#seloFlutuanteJesus, 
+#seloFlutuanteTermometro, 
+#seloFlutuanteSol {
   cursor: move;
   user-select: none;
 }
