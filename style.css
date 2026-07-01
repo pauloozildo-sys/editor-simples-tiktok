@@ -148,7 +148,7 @@ canvas {
   font-style: italic;
 }
 
-/* AQUI ESTÁ A CORREÇÃO DOS SELOS ARRASTÁVEIS */
+/* --- CONFIGURAÇÃO CORRETA DOS SELOS ARRASTÁVEIS --- */
 #seloFlutuanteCoracao, 
 #seloFlutuanteTaca, 
 #seloFlutuanteBeijo, 
@@ -158,13 +158,13 @@ canvas {
 #seloFlutuanteSol {
   cursor: move;
   user-select: none;
-}
-
-/* No CSS, defina os selos como transparentes e sem interação de clique, 
-   já que o arraste vai mexer no canvas renderizado */
-#seloFlutuanteCoracao, #seloFlutuanteTaca, #seloFlutuanteBeijo, 
-#seloFlutuanteCoracaoNovo, #seloFlutuanteJesus, 
-#seloFlutuanteTermometro, #seloFlutuanteSol {
-  opacity: 0; /* Fica invisível para o olho humano */
-  pointer-events: none; /* O clique passa direto para o canvas */
+  
+  /* OBRIGATÓRIO: Eles precisam ser detectados pelo mouse/dedo */
+  pointer-events: auto !important; 
+  
+  /* Mantemos visíveis na edição, o JavaScript zera a opacidade apenas no render final */
+  opacity: 1; 
+  
+  /* Garante que fiquem exatamente por cima do canvas para o toque funcionar */
+  z-index: 10; 
 }
