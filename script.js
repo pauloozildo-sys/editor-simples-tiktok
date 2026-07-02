@@ -266,7 +266,7 @@ document.getElementById('exportarBtn').addEventListener('click', async function(
     const combinedStream = new MediaStream([videoTrack, audioTrack]);
     const mediaRecorder = new MediaRecorder(combinedStream, {
       mimeType: 'video/webm;codecs=vp8,opus',
-      videoBitsPerSecond: 21000000 
+      videoBitsPerSecond: 31000000 
     });
     
     let chunks = [];
