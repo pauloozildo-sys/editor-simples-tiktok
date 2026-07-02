@@ -155,27 +155,44 @@ audioInput.addEventListener('change', (e) => {
 textoInput.addEventListener('input', desenharPreview);
 
 // ---------- FUNÇÃO PRINCIPAL: DESENHAR ----------
+// ---------- FUNÇÃO PRINCIPAL: DESENHAR (CORRIGIDA) ----------
 function desenharPreview() {
-  if (!videoAtual) return;
+  if (!videoAtual) return; 
 
-  canvas.width = 1080;
+  // Define a resolução real e fixa de exportação (TikTok/Reels vertical)
+  canvas.width = 1080;   
   canvas.height = 1350;
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.drawImage(videoAtual, dx, dy, dw, dh);
-  const videoWidth = videoAtual.videoWidth;
-  const videoHeight = videoAtual.videoHeight;
-  const proporcaoVideo = videoWidth / videoHeight;
-  const proporcaoCanvas = canvas.width / canvas.height;
 
-  let dx, dy, dw, dh;
+  // ====== CÁLCULO INTELIGENTE DO ASPECT RATIO (EFEITO COVER) ======
+  const canvaRatio = canvas.width / canvas.height;
+  const videoRatio = videoAtual.videoWidth / videoAtual.videoHeight;
+  
+  let sX, sY, sWidth, sHeight;
+
+  if (videoRatio > canvaRatio) {
+    // O vídeo é mais largo (ex: horizontal deitado). Corta as laterais do vídeo original.
+    sHeight = videoAtual.videoHeight;
+    sWidth = videoAtual.videoHeight * canvaRatio;
+    sX = (videoAtual.videoWidth - sWidth) / 2;
+    sY = 0;
+  } else {
+    // O vídeo é mais alto. Corta o topo e a base do vídeo original.
+    sWidth = videoAtual.videoWidth;
+    sHeight = videoAtual.videoWidth / canvaRatio;
+    sX = 0;
+    sY = (videoAtual.videoHeight - sHeight) / 2;
+  }
+
+  // Desenha o vídeo no Canvas usando os recortes corretos para não achatar
+  ctx.drawImage(videoAtual, sX, sY, sWidth, sHeight, 0, 0, canvas.width, canvas.height);
+  // =================================================================
 
   const tamSelo = 140;
 
   function desenharSelo(elemento, nome) {
     if (!elemento || elemento.style.display !== 'block') return;
-    
-    // O grande truque: Quando exportar o vídeo, some com as tags HTML flutuantes da tela
     elemento.style.opacity = estaExportando ? "0" : "1";
 
     let x = window.posicoesSelos[nome].x;
