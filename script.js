@@ -156,13 +156,19 @@ textoInput.addEventListener('input', desenharPreview);
 
 // ---------- FUNÇÃO PRINCIPAL: DESENHAR ----------
 function desenharPreview() {
-  if (!videoAtual) return; 
+  if (!videoAtual) return;
 
-  canvas.width = 1080;   
+  canvas.width = 1080;
   canvas.height = 1350;
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.drawImage(videoAtual, 0, 0, canvas.width, canvas.height);
+  ctx.drawImage(videoAtual, dx, dy, dw, dh);
+  const videoWidth = videoAtual.videoWidth;
+  const videoHeight = videoAtual.videoHeight;
+  const proporcaoVideo = videoWidth / videoHeight;
+  const proporcaoCanvas = canvas.width / canvas.height;
+
+  let dx, dy, dw, dh;
 
   const tamSelo = 140;
 
@@ -266,7 +272,7 @@ document.getElementById('exportarBtn').addEventListener('click', async function(
     const combinedStream = new MediaStream([videoTrack, audioTrack]);
     const mediaRecorder = new MediaRecorder(combinedStream, {
       mimeType: 'video/webm;codecs=vp8,opus',
-      videoBitsPerSecond: 25000000 
+      videoBitsPerSecond: 16000000 
     });
     
     let chunks = [];
@@ -387,4 +393,3 @@ function fazerElementoArrastavel(elemento, nome) {
 todosOsSelos.forEach(item => {
   if (item.el) fazerElementoArrastavel(item.el, item.nome);
 });
-
