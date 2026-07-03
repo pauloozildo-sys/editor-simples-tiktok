@@ -167,4 +167,6 @@ canvas {
   
   /* Garante que fiquem exatamente por cima do canvas para o toque funcionar */
   z-index: 10; 
+  img[id^="selo"], #seloFCoracao, #seloFTaca, #seloBeijo, #seloCoracaoNovo, #seloJesus, #seloTermometro, #seloSol {
+    display: none !important;
 }
