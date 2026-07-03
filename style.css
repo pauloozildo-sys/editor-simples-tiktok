@@ -168,3 +168,4 @@ canvas {
   /* Garante que fiquem exatamente por cima do canvas para o toque funcionar */
   z-index: 10; 
 }
+
