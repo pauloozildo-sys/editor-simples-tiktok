@@ -160,8 +160,8 @@ function desenharPreview() {
   if (!videoAtual) return; 
 
   // Define a resolução real e fixa de exportação (TikTok/Reels vertical)
-  canvas.width = 1080;   
-  canvas.height = 1350;
+ canvas.width = 1080;   
+ canvas.height = 1920;
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
