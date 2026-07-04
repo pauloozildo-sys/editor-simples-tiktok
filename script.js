@@ -235,6 +235,10 @@ function desenharPreview() {
   desenharSelo(seloJesus, 'jesus');
   desenharSelo(seloTermometro, 'termometro');
   desenharSelo(seloSol, 'sol');
+  desenharSelo(seloBarbie, 'barbie');
+  desenharSelo(seloBeijaflor, 'beijaflor');
+  desenharSelo(seloBorboleta, 'borboleta');
+  desenharSelo(seloMeuPastor, 'meupastor');
 
   // DESENHA O TEXTO
   const texto = textoInput.value || 'VOCÊ VAI AMAR ISSO';
