@@ -152,7 +152,7 @@ imagemInput.addEventListener('change', (e) => {
       atualizarCanvasLoop(); 
     });
   };
-});
+}); 
 
 function atualizarCanvasLoop() {
   if (!videoAtual) return;
