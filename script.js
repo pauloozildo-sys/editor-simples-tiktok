@@ -45,6 +45,10 @@ window.posicoesSelos = {
   jesus: { x: 1080 - 140 - 60, y: 220 },
   termometro: { x: 60, y: 1350 - 140 - 60 },
   sol: { x: 1080 - 140 - 60, y: 1350 - 140 - 60 }
+  barbie: { x: 60, y: 380 },
+  beijaflor: { x: 220, y: 380 },
+  borboleta: { x: 60, y: 540 },
+  meupastor: { x: 1080 - 140 - 60, y: 540 }
 };
 
 let estaExportando = false; 
