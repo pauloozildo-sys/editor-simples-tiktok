@@ -154,7 +154,11 @@ canvas {
 #seloFlutuanteBeijo, 
 #seloFlutuanteCoracaoNovo, 
 #seloFlutuanteJesus, 
-#seloFlutuanteTermometro, 
+#seloFlutuanteBorbuletazul, 
+#seloFlutuanteMeupastor,
+#seloFlutuanteBarbie,
+#seloFlutuanteTermometro,
+#seloFlutuanteBeijaflor,
 #seloFlutuanteSol {
   cursor: move;
   user-select: none;
