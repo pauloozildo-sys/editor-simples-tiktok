@@ -89,6 +89,20 @@ if(document.getElementById('btnSeloTermometro')) {
 if(document.getElementById('btnSeloSol')) {
   document.getElementById('btnSeloSol').addEventListener('click', function() { toggleSelo(seloSol, this); });
 }
+// Desenha os novos selos no canvas
+if (seloBarbie && seloBarbie.style.display === 'block') {
+  ctx.drawImage(seloBarbie, 60, 400, tamSelo, tamSelo);
+}
+if (seloBeijaflor && seloBeijaflor.style.display === 'block') {
+  ctx.drawImage(seloBeijaflor, 220, 400, tamSelo, tamSelo);
+}
+if (seloBorboleta && seloBorboleta.style.display === 'block') {
+  ctx.drawImage(seloBorboleta, 60, 560, tamSelo, tamSelo);
+}
+if (seloMeuPastor && seloMeuPastor.style.display === 'block') {
+  const posX = canvas.width - tamSelo - 60;
+  ctx.drawImage(seloMeuPastor, posX, 560, tamSelo, tamSelo);
+}
 
 let videoAtual = null; 
 let audioURL = null;
