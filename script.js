@@ -411,3 +411,4 @@ function fazerElementoArrastavel(elemento, nome) {
 todosOsSelos.forEach(item => {
   if (item.el) fazerElementoArrastavel(item.el, item.nome);
 });
+
