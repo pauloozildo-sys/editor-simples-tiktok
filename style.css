@@ -39,14 +39,24 @@ button:hover {
   background: #ff528a;
 }
 
+/* ====== CANVAS CORRIGIDO ====== */
 canvas {
   width: 100%;
   max-width: 400px;
   height: auto;
-  aspect-ratio: 1080 / 1350;
+  aspect-ratio: 1080 / 1920; /* <-- CORRIGIDO para 9:16 */
   border-radius: 12px;
   margin: 10px 0;
   background: #000;
+  display: block;
+}
+
+/* ====== CONTAINER DOS SELOS ====== */
+#app > div:has(canvas) {
+  position: relative !important;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
 }
 
 .posBtn, .alignBtn {
@@ -83,7 +93,7 @@ canvas {
   transform: scale(1.3);
 }
 
-/* --- ESPAÇO DA IA --- */
+/* ====== ESPAÇO DA IA ====== */
 .ia-container {
   background: #1a1a2e;
   border-radius: 16px;
@@ -148,28 +158,86 @@ canvas {
   font-style: italic;
 }
 
-/* --- CONFIGURAÇÃO CORRETA DOS SELOS ARRASTÁVEIS --- */
+/* ====== SELOS ARRASTÁVEIS CORRIGIDOS ====== */
 #seloFlutuanteCoracao, 
 #seloFlutuanteTaca, 
 #seloFlutuanteBeijo, 
 #seloFlutuanteCoracaoNovo, 
 #seloFlutuanteJesus, 
-#seloFlutuanteBorbuletazul, 
-#seloFlutuanteMeupastor,
+#seloFlutuanteBorboleta,   
+#seloFlutuantePastor,      
 #seloFlutuanteBarbie,
 #seloFlutuanteTermometro,
-#seloFlutuanteBeijaflor,
+#seloFlutuanteBeijaFlor,   
 #seloFlutuanteSol {
-  cursor: move;
+  position: absolute !important; /* <-- FORÇA POSITION ABSOLUTE */
+  cursor: grab; /* <-- MUDOU PARA GRAB (mais amigável) */
   user-select: none;
-  
-  /* OBRIGATÓRIO: Eles precisam ser detectados pelo mouse/dedo */
   pointer-events: auto !important; 
-  
-  /* Mantemos visíveis na edição, o JavaScript zera a opacidade apenas no render final */
   opacity: 1; 
-  
-  /* Garante que fiquem exatamente por cima do canvas para o toque funcionar */
-  z-index: 10; 
+  z-index: 10;
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  transition: none; /* <-- REMOVE TRANSITION PARA NÃO TRAVAR O ARRASTE */
 }
 
+/* Quando estiver arrastando */
+#seloFlutuanteCoracao:active,
+#seloFlutuanteTaca:active,
+#seloFlutuanteBeijo:active,
+#seloFlutuanteCoracaoNovo:active,
+#seloFlutuanteJesus:active,
+#seloFlutuanteBorboleta:active,
+#seloFlutuantePastor:active,
+#seloFlutuanteBarbie:active,
+#seloFlutuanteTermometro:active,
+#seloFlutuanteBeijaFlor:active,
+#seloFlutuanteSol:active {
+  cursor: grabbing !important;
+  z-index: 20 !important; /* Fica por cima de tudo durante o arraste */
+  opacity: 0.9;
+}
+
+/* ====== RESPONSIVIDADE PARA MOBILE ====== */
+@media (max-width: 480px) {
+  #app {
+    padding: 15px;
+  }
+  
+  .posBtn, .alignBtn {
+    font-size: 12px;
+    padding: 6px 12px;
+    min-width: 50px;
+  }
+  
+  .ia-row {
+    flex-direction: column;
+  }
+  
+  .ia-row button {
+    width: 100%;
+  }
+  
+#seloFlutuanteCoracao, 
+#seloFlutuanteTaca, 
+#seloFlutuanteBeijo, 
+#seloFlutuanteCoracaoNovo, 
+#seloFlutuanteJesus, 
+#seloFlutuanteBorboleta,   
+#seloFlutuantePastor,      
+#seloFlutuanteBarbie,
+#seloFlutuanteTermometro,
+#seloFlutuanteBeijaFlor,   
+#seloFlutuanteSol {
+  position: absolute !important;
+  cursor: grab;
+  user-select: none;
+  pointer-events: none !important; /* <-- MUDEI DE 'auto' para 'none' */
+  opacity: 0 !important; /* <-- ESCONDE COMPLETAMENTE */
+  z-index: 10;
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  }
+} 

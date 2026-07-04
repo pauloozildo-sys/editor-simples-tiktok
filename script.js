@@ -4,6 +4,10 @@ const textoInput = document.getElementById('textoInput');
 const canvas = document.getElementById('previewCanvas');
 const ctx = canvas.getContext('2d');
 
+// ====== CONFIGURAÇÃO INICIAL DO CANVAS ======
+canvas.width = 1080;
+canvas.height = 1920;
+
 // ====== DECLARAÇÃO DE TODOS OS SELOS ======
 const seloFCoracao = document.getElementById('seloFlutuanteCoracao');
 const seloFTaca = document.getElementById('seloFlutuanteTaca');
@@ -13,9 +17,9 @@ const seloJesus = document.getElementById('seloFlutuanteJesus');
 const seloTermometro = document.getElementById('seloFlutuanteTermometro');
 const seloSol = document.getElementById('seloFlutuanteSol');
 const seloBarbie = document.getElementById('seloFlutuanteBarbie');
-const seloBeijaflor = document.getElementById('seloFlutuanteBeijaFlor'); // Ajustado para bater com o HTML
+const seloBeijaflor = document.getElementById('seloFlutuanteBeijaFlor');
 const seloBorboleta = document.getElementById('seloFlutuanteBorboleta');
-const seloMeuPastor = document.getElementById('seloFlutuantePastor'); // Ajustado para bater com o HTML
+const seloMeuPastor = document.getElementById('seloFlutuantePastor');
 
 const todosOsSelos = [
   { el: seloFCoracao, nome: 'coracao' },
@@ -24,7 +28,7 @@ const todosOsSelos = [
   { el: seloCoracaoNovo, nome: 'coracaoNovo' },
   { el: seloJesus, nome: 'jesus' },
   { el: seloTermometro, nome: 'termometro' },
-  { el: seloSol, nome: 'sol' }, // <-- VÍRGULA CORRIGIDA AQUI
+  { el: seloSol, nome: 'sol' },
   { el: seloBarbie, nome: 'barbie' },
   { el: seloBeijaflor, nome: 'beijaflor' },
   { el: seloBorboleta, nome: 'borboleta' },
@@ -35,7 +39,7 @@ todosOsSelos.forEach(item => {
   if (item.el) item.el.crossOrigin = "anonymous";
 });
 
-// ====== CONTROLE DE POSIÇÕES DINÂMICAS PARA O CANVAS (1080x1920) ======
+// ====== CONTROLE DE POSIÇÕES ======
 window.posicoesSelos = {
   coracao: { x: 60, y: 60 },
   taca: { x: 1080 - 140 - 60, y: 60 },
@@ -43,7 +47,7 @@ window.posicoesSelos = {
   coracaoNovo: { x: 220, y: 220 },
   jesus: { x: 1080 - 140 - 60, y: 220 },
   termometro: { x: 60, y: 1920 - 140 - 60 },
-  sol: { x: 1080 - 140 - 60, y: 1920 - 140 - 60 }, // <-- VÍRGULA E ALTURA CORRIGIDAS AQUI (1920)
+  sol: { x: 1080 - 140 - 60, y: 1920 - 140 - 60 },
   barbie: { x: 60, y: 380 },
   beijaflor: { x: 220, y: 380 },
   borboleta: { x: 60, y: 540 },
@@ -65,7 +69,7 @@ function toggleSelo(elemento, botao) {
   desenharPreview();
 }
 
-// ====== MAREAMENTO DE EVENTOS DE CLIQUE DOS BOTÕES ======
+// ====== MAPEAMENTO DE EVENTOS DE CLIQUE DOS BOTÕES ======
 if(document.getElementById('btnFiltroCoracao')) document.getElementById('btnFiltroCoracao').addEventListener('click', function() { toggleSelo(seloFCoracao, this); });
 if(document.getElementById('btnFiltroTaca')) document.getElementById('btnFiltroTaca').addEventListener('click', function() { toggleSelo(seloFTaca, this); });
 if(document.getElementById('btnSeloBeijo')) document.getElementById('btnSeloBeijo').addEventListener('click', function() { toggleSelo(seloBeijo, this); });
@@ -73,12 +77,16 @@ if(document.getElementById('btnSeloCoracaoNovo')) document.getElementById('btnSe
 if(document.getElementById('btnSeloJesus')) document.getElementById('btnSeloJesus').addEventListener('click', function() { toggleSelo(seloJesus, this); });
 if(document.getElementById('btnSeloTermometro')) document.getElementById('btnSeloTermometro').addEventListener('click', function() { toggleSelo(seloTermometro, this); });
 if(document.getElementById('btnSeloSol')) document.getElementById('btnSeloSol').addEventListener('click', function() { toggleSelo(seloSol, this); });
+if(document.getElementById('btnFiltroBarbie')) document.getElementById('btnFiltroBarbie').addEventListener('click', function() { toggleSelo(seloBarbie, this); });
+if(document.getElementById('btnFiltroBeijaFlor')) document.getElementById('btnFiltroBeijaFlor').addEventListener('click', function() { toggleSelo(seloBeijaflor, this); });
+if(document.getElementById('btnFiltroBorboleta')) document.getElementById('btnFiltroBorboleta').addEventListener('click', function() { toggleSelo(seloBorboleta, this); });
 
-// Eventos criados para os botões novos do seu painel HTML:
-if(document.getElementById('btnFiltrobarbie')) document.getElementById('btnFiltrobarbie').addEventListener('click', function() { toggleSelo(seloBarbie, this); });
-if(document.getElementById('btnFiltrobeijaflor')) document.getElementById('btnFiltrobeijaflor').addEventListener('click', function() { toggleSelo(seloBeijaflor, this); });
-if(document.getElementById('btnFiltroborbuletazul')) document.getElementById('btnFiltroborbuletazul').addEventListener('click', function() { toggleSelo(seloBorboleta, this); });
-if(document.getElementById('btnFiltromeupastor')) document.getElementById('btnFiltromeupastor').addEventListener('click', function() { toggleSelo(seloMeuPastor, this); });
+// ====== CORREÇÃO: Botão Meu Pastor ======
+if(document.getElementById('btnFiltroPastor')) {
+  document.getElementById('btnFiltroPastor').addEventListener('click', function() { 
+    toggleSelo(seloMeuPastor, this); 
+  });
+}
 
 let videoAtual = null; 
 let audioURL = null;
@@ -121,7 +129,7 @@ document.querySelectorAll('.emojiBtn').forEach(emoji => {
   });
 });
 
-// ---------- UPLOAD DE VÍDEO ----------
+// ---------- UPLOAD DE VÍDEO (CORRIGIDO) ----------
 imagemInput.addEventListener('change', (e) => {
   const file = e.target.files[0];
   if (!file) return;
@@ -139,17 +147,23 @@ imagemInput.addEventListener('change', (e) => {
     videoAtual = video;
     video.play().then(() => {
       if (loopPreview) cancelAnimationFrame(loopPreview);
+      desenharPreview(); // <-- CHAMA UMA VEZ PARA MOSTRAR O PRIMEIRO FRAME
       atualizarCanvasLoop(); 
-    });
+    }).catch(err => console.log('Erro ao tocar:', err));
   };
 }); 
 
 function atualizarCanvasLoop() {
   if (!videoAtual) return;
   desenharPreview();
-  loopPreview = requestAnimationFrame(atualizarCanvasLoop);
+  
+  // Continua o loop apenas se o vídeo estiver tocando
+  if (!videoAtual.paused) {
+    loopPreview = requestAnimationFrame(atualizarCanvasLoop);
+  }
 }
 
+// ---------- AUDIO ----------
 audioInput.addEventListener('change', (e) => {
   const file = e.target.files[0];
   if (file) audioURL = URL.createObjectURL(file);
@@ -157,12 +171,9 @@ audioInput.addEventListener('change', (e) => {
 
 textoInput.addEventListener('input', desenharPreview);
 
-// ---------- FUNÇÃO PRINCIPAL: DESENHAR (REVISADA) ----------
+// ---------- FUNÇÃO PRINCIPAL: DESENHAR ----------
 function desenharPreview() {
   if (!videoAtual) return; 
-
-  canvas.width = 1080;   
-  canvas.height = 1920; // 9:16 Perfeito para celular
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -188,18 +199,20 @@ function desenharPreview() {
 
   const tamSelo = 140;
 
-  // Lógica interna e limpa para renderizar os stickers
+  // ====== DESENHA TODOS OS STICKERS ======
   function desenharSelo(elemento, nome) {
     if (!elemento || elemento.style.display !== 'block') return;
-    elemento.style.opacity = estaExportando ? "0" : "1";
-
+    
     let x = window.posicoesSelos[nome].x;
     let y = window.posicoesSelos[nome].y;
     
-    ctx.drawImage(elemento, x, y, tamSelo, tamSelo);
+    try {
+      ctx.drawImage(elemento, x, y, tamSelo, tamSelo);
+    } catch(e) {
+      console.log('Erro ao desenhar selo:', nome, e);
+    }
   }
 
-  // Desenha TODOS os selos usando a função oficial
   desenharSelo(seloFCoracao, 'coracao');
   desenharSelo(seloFTaca, 'taca');
   desenharSelo(seloBeijo, 'beijo');
@@ -212,7 +225,7 @@ function desenharPreview() {
   desenharSelo(seloBorboleta, 'borboleta');
   desenharSelo(seloMeuPastor, 'meupastor');
 
-  // DESENHA O TEXTO
+  // ====== DESENHA O TEXTO ======
   const texto = textoInput.value || 'VOCÊ VAI AMAR ISSO';
   ctx.textAlign = alinhamento;
   ctx.textBaseline = 'middle';
@@ -292,7 +305,7 @@ document.getElementById('exportarBtn').addEventListener('click', async function(
     const combinedStream = new MediaStream([videoTrack, audioTrack]);
     const mediaRecorder = new MediaRecorder(combinedStream, {
       mimeType: 'video/webm;codecs=vp8,opus',
-      videoBitsPerSecond: 20000000 
+      videoBitsPerSecond: 40000000 
     });
     
     let chunks = [];
@@ -346,6 +359,8 @@ document.getElementById('exportarBtn').addEventListener('click', async function(
 // FUNÇÃO DE ARRASTAR SINCRONIZADA COM O CANVAS
 // =============================================
 function fazerElementoArrastavel(elemento, nome) {
+  if (!elemento) return;
+  
   let posInicialX = 0, posInicialY = 0;
 
   elemento.addEventListener('mousedown', iniciarArrasto);
@@ -371,7 +386,7 @@ function fazerElementoArrastavel(elemento, nome) {
   function arrastando(e) {
     e.preventDefault();
     
-    let clienteX, clienteY;
+    let clientX, clientY;
     if (e.type === 'touchmove') {
       clientX = e.touches[0].clientX;
       clientY = e.touches[0].clientY;
@@ -380,11 +395,11 @@ function fazerElementoArrastavel(elemento, nome) {
       clientY = e.clientY;
     }
 
-    let deltaX = clienteX - posInicialX;
-    let deltaY = clienteY - posInicialY;
+    let deltaX = clientX - posInicialX;
+    let deltaY = clientY - posInicialY;
 
-    posInicialX = clienteX;
-    posInicialY = clienteY;
+    posInicialX = clientX;
+    posInicialY = clientY;
 
     elemento.style.top = (elemento.offsetTop + deltaY) + "px";
     elemento.style.left = (elemento.offsetLeft + deltaX) + "px";
@@ -411,4 +426,3 @@ function fazerElementoArrastavel(elemento, nome) {
 todosOsSelos.forEach(item => {
   if (item.el) fazerElementoArrastavel(item.el, item.nome);
 });
-
