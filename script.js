@@ -13,9 +13,9 @@ const seloJesus = document.getElementById('seloFlutuanteJesus');
 const seloTermometro = document.getElementById('seloFlutuanteTermometro');
 const seloSol = document.getElementById('seloFlutuanteSol');
 const seloBarbie = document.getElementById('seloFlutuanteBarbie');
-const seloBeijaflor = document.getElementById('seloFlutuanteBeijaflor');
+const seloBeijaflor = document.getElementById('seloFlutuanteBeijaFlor'); // Ajustado para bater com o HTML
 const seloBorboleta = document.getElementById('seloFlutuanteBorboleta');
-const seloMeuPastor = document.getElementById('seloFlutuanteMeuPastor');
+const seloMeuPastor = document.getElementById('seloFlutuantePastor'); // Ajustado para bater com o HTML
 
 const todosOsSelos = [
   { el: seloFCoracao, nome: 'coracao' },
@@ -24,27 +24,26 @@ const todosOsSelos = [
   { el: seloCoracaoNovo, nome: 'coracaoNovo' },
   { el: seloJesus, nome: 'jesus' },
   { el: seloTermometro, nome: 'termometro' },
-  { el: seloSol, nome: 'sol' }
+  { el: seloSol, nome: 'sol' }, // <-- VÍRGULA CORRIGIDA AQUI
   { el: seloBarbie, nome: 'barbie' },
   { el: seloBeijaflor, nome: 'beijaflor' },
   { el: seloBorboleta, nome: 'borboleta' },
-  { el: seloMeuPastor, nome: 'meupastor' },
+  { el: seloMeuPastor, nome: 'meupastor' }
 ];
-
 
 todosOsSelos.forEach(item => {
   if (item.el) item.el.crossOrigin = "anonymous";
 });
 
-// ====== CONTROLE DE POSIÇÕES DINÂMICAS PARA O CANVAS ======
+// ====== CONTROLE DE POSIÇÕES DINÂMICAS PARA O CANVAS (1080x1920) ======
 window.posicoesSelos = {
   coracao: { x: 60, y: 60 },
   taca: { x: 1080 - 140 - 60, y: 60 },
   beijo: { x: 60, y: 220 },
   coracaoNovo: { x: 220, y: 220 },
   jesus: { x: 1080 - 140 - 60, y: 220 },
-  termometro: { x: 60, y: 1350 - 140 - 60 },
-  sol: { x: 1080 - 140 - 60, y: 1350 - 140 - 60 }
+  termometro: { x: 60, y: 1920 - 140 - 60 },
+  sol: { x: 1080 - 140 - 60, y: 1920 - 140 - 60 }, // <-- VÍRGULA E ALTURA CORRIGIDAS AQUI (1920)
   barbie: { x: 60, y: 380 },
   beijaflor: { x: 220, y: 380 },
   borboleta: { x: 60, y: 540 },
@@ -53,15 +52,7 @@ window.posicoesSelos = {
 
 let estaExportando = false; 
 
-// ====== EVENTOS DOS BOTÕES DOS SELOS ======
-document.getElementById('btnFiltroCoracao').addEventListener('click', () => {
-  toggleSelo(seloFCoracao, document.getElementById('btnFiltroCoracao'));
-});
-
-document.getElementById('btnFiltroTaca').addEventListener('click', () => {
-  toggleSelo(seloFTaca, document.getElementById('btnFiltroTaca'));
-});
-
+// ====== FUNÇÃO PARA ALTERNAR EXIBIÇÃO DOS STICKERS ======
 function toggleSelo(elemento, botao) {
   if (!elemento) return;
   if (elemento.style.display === 'none' || elemento.style.display === '') {
@@ -74,35 +65,20 @@ function toggleSelo(elemento, botao) {
   desenharPreview();
 }
 
-if(document.getElementById('btnSeloBeijo')) {
-  document.getElementById('btnSeloBeijo').addEventListener('click', function() { toggleSelo(seloBeijo, this); });
-}
-if(document.getElementById('btnSeloCoracaoNovo')) {
-  document.getElementById('btnSeloCoracaoNovo').addEventListener('click', function() { toggleSelo(seloCoracaoNovo, this); });
-}
-if(document.getElementById('btnSeloJesus')) {
-  document.getElementById('btnSeloJesus').addEventListener('click', function() { toggleSelo(seloJesus, this); });
-}
-if(document.getElementById('btnSeloTermometro')) {
-  document.getElementById('btnSeloTermometro').addEventListener('click', function() { toggleSelo(seloTermometro, this); });
-}
-if(document.getElementById('btnSeloSol')) {
-  document.getElementById('btnSeloSol').addEventListener('click', function() { toggleSelo(seloSol, this); });
-}
-// Desenha os novos selos no canvas
-if (seloBarbie && seloBarbie.style.display === 'block') {
-  ctx.drawImage(seloBarbie, 60, 400, tamSelo, tamSelo);
-}
-if (seloBeijaflor && seloBeijaflor.style.display === 'block') {
-  ctx.drawImage(seloBeijaflor, 220, 400, tamSelo, tamSelo);
-}
-if (seloBorboleta && seloBorboleta.style.display === 'block') {
-  ctx.drawImage(seloBorboleta, 60, 560, tamSelo, tamSelo);
-}
-if (seloMeuPastor && seloMeuPastor.style.display === 'block') {
-  const posX = canvas.width - tamSelo - 60;
-  ctx.drawImage(seloMeuPastor, posX, 560, tamSelo, tamSelo);
-}
+// ====== MAREAMENTO DE EVENTOS DE CLIQUE DOS BOTÕES ======
+if(document.getElementById('btnFiltroCoracao')) document.getElementById('btnFiltroCoracao').addEventListener('click', function() { toggleSelo(seloFCoracao, this); });
+if(document.getElementById('btnFiltroTaca')) document.getElementById('btnFiltroTaca').addEventListener('click', function() { toggleSelo(seloFTaca, this); });
+if(document.getElementById('btnSeloBeijo')) document.getElementById('btnSeloBeijo').addEventListener('click', function() { toggleSelo(seloBeijo, this); });
+if(document.getElementById('btnSeloCoracaoNovo')) document.getElementById('btnSeloCoracaoNovo').addEventListener('click', function() { toggleSelo(seloCoracaoNovo, this); });
+if(document.getElementById('btnSeloJesus')) document.getElementById('btnSeloJesus').addEventListener('click', function() { toggleSelo(seloJesus, this); });
+if(document.getElementById('btnSeloTermometro')) document.getElementById('btnSeloTermometro').addEventListener('click', function() { toggleSelo(seloTermometro, this); });
+if(document.getElementById('btnSeloSol')) document.getElementById('btnSeloSol').addEventListener('click', function() { toggleSelo(seloSol, this); });
+
+// Eventos criados para os botões novos do seu painel HTML:
+if(document.getElementById('btnFiltrobarbie')) document.getElementById('btnFiltrobarbie').addEventListener('click', function() { toggleSelo(seloBarbie, this); });
+if(document.getElementById('btnFiltrobeijaflor')) document.getElementById('btnFiltrobeijaflor').addEventListener('click', function() { toggleSelo(seloBeijaflor, this); });
+if(document.getElementById('btnFiltroborbuletazul')) document.getElementById('btnFiltroborbuletazul').addEventListener('click', function() { toggleSelo(seloBorboleta, this); });
+if(document.getElementById('btnFiltromeupastor')) document.getElementById('btnFiltromeupastor').addEventListener('click', function() { toggleSelo(seloMeuPastor, this); });
 
 let videoAtual = null; 
 let audioURL = null;
@@ -181,43 +157,38 @@ audioInput.addEventListener('change', (e) => {
 
 textoInput.addEventListener('input', desenharPreview);
 
-// ---------- FUNÇÃO PRINCIPAL: DESENHAR ----------
-// ---------- FUNÇÃO PRINCIPAL: DESENHAR (CORRIGIDA) ----------
+// ---------- FUNÇÃO PRINCIPAL: DESENHAR (REVISADA) ----------
 function desenharPreview() {
   if (!videoAtual) return; 
 
-  // Define a resolução real e fixa de exportação (TikTok/Reels vertical)
   canvas.width = 1080;   
-  canvas.height = 1920;
+  canvas.height = 1920; // 9:16 Perfeito para celular
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // ====== CÁLCULO INTELIGENTE DO ASPECT RATIO (EFEITO COVER) ======
+  // ====== CÁLCULO COVER RECORTE ======
   const canvaRatio = canvas.width / canvas.height;
   const videoRatio = videoAtual.videoWidth / videoAtual.videoHeight;
   
   let sX, sY, sWidth, sHeight;
 
   if (videoRatio > canvaRatio) {
-    // O vídeo é mais largo (ex: horizontal deitado). Corta as laterais do vídeo original.
     sHeight = videoAtual.videoHeight;
     sWidth = videoAtual.videoHeight * canvaRatio;
     sX = (videoAtual.videoWidth - sWidth) / 2;
     sY = 0;
   } else {
-    // O vídeo é mais alto. Corta o topo e a base do vídeo original.
     sWidth = videoAtual.videoWidth;
     sHeight = videoAtual.videoWidth / canvaRatio;
     sX = 0;
     sY = (videoAtual.videoHeight - sHeight) / 2;
   }
 
-  // Desenha o vídeo no Canvas usando os recortes corretos para não achatar
   ctx.drawImage(videoAtual, sX, sY, sWidth, sHeight, 0, 0, canvas.width, canvas.height);
-  // =================================================================
 
   const tamSelo = 140;
 
+  // Lógica interna e limpa para renderizar os stickers
   function desenharSelo(elemento, nome) {
     if (!elemento || elemento.style.display !== 'block') return;
     elemento.style.opacity = estaExportando ? "0" : "1";
@@ -228,6 +199,7 @@ function desenharPreview() {
     ctx.drawImage(elemento, x, y, tamSelo, tamSelo);
   }
 
+  // Desenha TODOS os selos usando a função oficial
   desenharSelo(seloFCoracao, 'coracao');
   desenharSelo(seloFTaca, 'taca');
   desenharSelo(seloBeijo, 'beijo');
@@ -344,7 +316,7 @@ document.getElementById('exportarBtn').addEventListener('click', async function(
       
       const link = document.createElement('a');
       link.href = url;
-      link.download = 'video-para-minha-mae.mp4';
+      link.download = 'video-final-editado.mp4';
       link.click();
       
       btn.textContent = textoOriginal;
@@ -401,11 +373,11 @@ function fazerElementoArrastavel(elemento, nome) {
     
     let clienteX, clienteY;
     if (e.type === 'touchmove') {
-      clienteX = e.touches[0].clientX;
-      clienteY = e.touches[0].clientY;
+      clientX = e.touches[0].clientX;
+      clientY = e.touches[0].clientY;
     } else {
-      clienteX = e.clientX;
-      clienteY = e.clientY;
+      clientX = e.clientX;
+      clientY = e.clientY;
     }
 
     let deltaX = clienteX - posInicialX;
@@ -414,11 +386,9 @@ function fazerElementoArrastavel(elemento, nome) {
     posInicialX = clienteX;
     posInicialY = clienteY;
 
-    // 1. Move o elemento HTML visualmente na tela
     elemento.style.top = (elemento.offsetTop + deltaY) + "px";
     elemento.style.left = (elemento.offsetLeft + deltaX) + "px";
     
-    // 2. Transforma o arrasto da tela para a escala real interna do Canvas (1080x1350)
     const rect = canvas.getBoundingClientRect();
     const fatorX = canvas.width / rect.width;
     const fatorY = canvas.height / rect.height;
@@ -437,8 +407,7 @@ function fazerElementoArrastavel(elemento, nome) {
   }
 }
 
-// Ativa o movimento fluído para cada um
+// Ativa o movimento fluído para cada um deles
 todosOsSelos.forEach(item => {
   if (item.el) fazerElementoArrastavel(item.el, item.nome);
 });
-
