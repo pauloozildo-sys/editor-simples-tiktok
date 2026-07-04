@@ -12,6 +12,10 @@ const seloCoracaoNovo = document.getElementById('seloFlutuanteCoracaoNovo');
 const seloJesus = document.getElementById('seloFlutuanteJesus');
 const seloTermometro = document.getElementById('seloFlutuanteTermometro');
 const seloSol = document.getElementById('seloFlutuanteSol');
+const seloBarbie = document.getElementById('seloFlutuanteBarbie');
+const seloBeijaflor = document.getElementById('seloFlutuanteBeijaflor');
+const seloBorboleta = document.getElementById('seloFlutuanteBorboleta');
+const seloMeuPastor = document.getElementById('seloFlutuanteMeuPastor');
 
 const todosOsSelos = [
   { el: seloFCoracao, nome: 'coracao' },
@@ -21,7 +25,12 @@ const todosOsSelos = [
   { el: seloJesus, nome: 'jesus' },
   { el: seloTermometro, nome: 'termometro' },
   { el: seloSol, nome: 'sol' }
+  { el: seloBarbie, nome: 'barbie' },
+  { el: seloBeijaflor, nome: 'beijaflor' },
+  { el: seloBorboleta, nome: 'borboleta' },
+  { el: seloMeuPastor, nome: 'meupastor' },
 ];
+
 
 todosOsSelos.forEach(item => {
   if (item.el) item.el.crossOrigin = "anonymous";
