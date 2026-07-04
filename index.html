@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎬 TrilhaVisual</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+    <h1>🎬 TrilhaVisual</h1>
+
+    <!-- UPLOADS -->
+    <input type="file" id="imagemInput" accept="video/*">
+    <input type="file" id="audioInput" accept="audio/*">
+
+    <!-- POSIÇÃO -->
+    <div style="display:flex; gap:10px; margin:10px 0; flex-wrap:wrap;">
+      <button class="posBtn" data-pos="top">⬆️ Topo</button>
+      <button class="posBtn" data-pos="center" style="background:#ff2d75;">⬛ Centro</button>
+      <button class="posBtn" data-pos="bottom">⬇️ Base</button>
+      <button class="posBtn" data-pos="corner">↘️ Canto</button>
+    </div>
+
+    <!-- ALINHAMENTO -->
+    <div style="display:flex; gap:10px; margin:10px 0; flex-wrap:wrap;">
+      <button class="alignBtn" data-align="left">⬅️ Esq</button>
+      <button class="alignBtn" data-align="center" style="background:#ff2d75;">⬛ Centro</button>
+      <button class="alignBtn" data-align="right">➡️ Dir</button>
+    </div>
+
+    <!-- TEXTO -->
+    <div style="display:flex; gap:5px; margin:10px 0; flex-wrap:wrap;">
+      <input type="text" id="textoInput" placeholder="Digite seu texto..." style="flex:1;">
+    </div>
+
+    <!-- EMOJIS -->
+    <details style="margin: 15px 0; background: #222; border-radius: 10px; padding: 5px;">
+      <summary style="cursor: pointer; color: #fff; font-size: 16px; padding: 10px; list-style: none; text-align: center; font-weight: bold;">
+        😎 Clique para Ver os Emojis
+      </summary>
+      <div id="emojiPainel" style="display:flex; gap:8px; flex-wrap:wrap; padding: 10px; justify-content:center;">
+        <span class="emojiBtn" style="font-size:28px; cursor:pointer;">😊</span>
+        <span class="emojiBtn" style="font-size:28px; cursor:pointer;">😂</span>
+        <span class="emojiBtn" style="font-size:28px; cursor:pointer;">🔥</span>
+        <span class="emojiBtn" style="font-size:28px; cursor:pointer;">❤️</span>
+        <span class="emojiBtn" style="font-size:28px; cursor:pointer;">😍</span>
+        <span class="emojiBtn" style="font-size:28px; cursor:pointer;">🥺</span>
+        <span class="emojiBtn" style="font-size:28px; cursor:pointer;">🙏</span>
+        <span class="emojiBtn" style="font-size:28px; cursor:pointer;">🚀</span>
+        <span class="emojiBtn" style="font-size:28px; cursor:pointer;">🎉</span>
+        <span class="emojiBtn" style="font-size:28px; cursor:pointer;">👍</span>
+        <span class="emojiBtn" style="font-size:28px; cursor:pointer;">😎</span>
+        <span class="emojiBtn" style="font-size:28px; cursor:pointer;">💩</span>
+      </div>
+    </details>
+
+    <!-- SELOS (BOTÕES DE ATIVAÇÃO) -->
+    <details style="margin: 15px 0; background: #222; border-radius: 10px; padding: 5px;">
+      <summary style="cursor: pointer; color: #fff; font-size: 16px; padding: 10px; list-style: none; text-align: center; font-weight: bold;">
+        🇧🇷 Ativar Selos na Tela
+      </summary>
+      <div id="seloPainel" style="display:flex; gap:10px; flex-wrap:wrap; padding: 10px; justify-content:center;">
+        <button id="btnFiltroCoracao" style="padding:10px; cursor:pointer; background:#333; color:white; border:none; border-radius:5px;">❤️ Coração</button>
+        <button id="btnFiltroTaca" style="padding:10px; cursor:pointer; background:#333; color:white; border:none; border-radius:5px;">🏆 Taça</button>
+        <button id="btnSeloBeijo" style="padding:10px; cursor:pointer; background:#333; color:white; border:none; border-radius:5px;">💋 Beijo</button>
+        <button id="btnSeloCoracaoNovo" style="padding:10px; cursor:pointer; background:#333; color:white; border:none; border-radius:5px;">💖 Novo Coração</button>
+        <button id="btnSeloJesus" style="padding:10px; cursor:pointer; background:#333; color:white; border:none; border-radius:5px;">🙏 Jesus</button>
+        <button id="btnSeloTermometro" style="padding:10px; cursor:pointer; background:#333; color:white; border:none; border-radius:5px;">🌡️ Termômetro</button>
+        <button id="btnSeloSol" style="padding:10px; cursor:pointer; background:#333; color:white; border:none; border-radius:5px;">☀️ Sol</button>
+        <button id="btnFiltroBarbie" style="padding:10px; cursor:pointer; background:#333; color:white; border:none; border-radius:5px;">👱🏼‍♀️ Barbie</button>
+        <button id="btnFiltroBeijaFlor" style="padding:10px; cursor:pointer; background:#333; color:white; border:none; border-radius:5px;">🐦 Beija-flor</button>
+        <button id="btnFiltroBorboleta" style="padding:10px; cursor:pointer; background:#333; color:white; border:none; border-radius:5px;">🦋 Borboleta</button>
+        <button id="btnFiltroPastor" style="padding:10px; cursor:pointer; background:#333; color:white; border:none; border-radius:5px;">❤️‍🔥 Pastor</button>
+      </div>
+    </details>
+
+    <!-- IA -->
+    <div class="ia-container">
+      <label>🤖 Assistente IA</label>
+      <div class="ia-row">
+        <input type="text" id="comandoIA" placeholder="Ex: Coloca a taça no canto direito com texto emocionante...">
+        <button id="btnIA">✨ IA</button>
+      </div>
+      <div id="statusIA" class="ia-status">💡 Diga o que quer fazer no vídeo</div>
+    </div>
+
+    <!-- CANVAS + SELOS FLUTUANTES -->
+    <div style="position: relative; width: 100%; max-width: 500px; margin: 0 auto;">
+      <canvas id="previewCanvas" style="width: 100%; display: block; border-radius: 12px;"></canvas>
+
+      <!-- CADA SELO COM UM ID ÚNICO -->
+      <img id="seloFlutuanteCoracao" src="brasil1.png" style="position: absolute; top: 20px; left: 20px; width: 60px; height: 60px; object-fit: contain; display: none; pointer-events: auto; cursor: grab; z-index: 10;">
+      <img id="seloFlutuanteTaca" src="taçacopa1.png" style="position: absolute; top: 20px; right: 20px; width: 60px; height: 60px; object-fit: contain; display: none; pointer-events: auto; cursor: grab; z-index: 10;">
+      <img id="seloFlutuanteBeijo" src="beijo.png" style="position: absolute; top: 80px; left: 20px; width: 60px; height: 60px; object-fit: contain; display: none; pointer-events: auto; cursor: grab; z-index: 10;">
+      <img id="seloFlutuanteCoracaoNovo" src="coração.png" style="position: absolute; top: 80px; left: 100px; width: 60px; height: 60px; object-fit: contain; display: none; pointer-events: auto; cursor: grab; z-index: 10;">
+      <img id="seloFlutuanteJesus" src="Jesus.png" style="position: absolute; top: 80px; right: 20px; width: 60px; height: 60px; object-fit: contain; display: none; pointer-events: auto; cursor: grab; z-index: 10;">
+      <img id="seloFlutuanteTermometro" src="termometro.png" style="position: absolute; bottom: 20px; left: 20px; width: 60px; height: 60px; object-fit: contain; display: none; pointer-events: auto; cursor: grab; z-index: 10;">
+      <img id="seloFlutuanteSol" src="sol.png" style="position: absolute; bottom: 20px; right: 20px; width: 60px; height: 60px; object-fit: contain; display: none; pointer-events: auto; cursor: grab; z-index: 10;">
+      <img id="seloFlutuanteBarbie" src="barbie.png" style="position: absolute; top: 140px; left: 20px; width: 60px; height: 60px; object-fit: contain; display: none; pointer-events: auto; cursor: grab; z-index: 10;">
+      <img id="seloFlutuanteBeijaFlor" src="beijaflor.png" style="position: absolute; top: 140px; left: 100px; width: 60px; height: 60px; object-fit: contain; display: none; pointer-events: auto; cursor: grab; z-index: 10;">
+      <img id="seloFlutuanteBorboleta" src="borbuletazul.png" style="position: absolute; top: 140px; right: 20px; width: 60px; height: 60px; object-fit: contain; display: none; pointer-events: auto; cursor: grab; z-index: 10;">
+      <img id="seloFlutuantePastor" src="meupastor.png" style="position: absolute; bottom: 80px; left: 20px; width: 60px; height: 60px; object-fit: contain; display: none; pointer-events: auto; cursor: grab; z-index: 10;">
+    </div>
+
+    <!-- EXPORTAR -->
+    <button id="exportarBtn" style="margin-top:20px;">📤 Exportar Vídeo</button>
+    <video id="videoPreview" controls style="width:100%; border-radius:12px; margin-top:15px; display:none;"></video>
+    <p style="font-size:12px; color:#888; margin-top:10px;">⏱️ O vídeo terá o tempo do áudio (ideal para TikTok/Reels)</p>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
