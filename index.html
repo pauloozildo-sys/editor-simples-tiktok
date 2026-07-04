@@ -54,19 +54,21 @@
       <summary style="cursor: pointer; color: #fff; font-size: 16px; padding: 10px; list-style: none; text-align: center; font-weight: bold;">
         🇧🇷 Ativar Selos na Tela
       </summary>
-      <div id="seloPainel" style="display:flex; gap:10px; flex-wrap:wrap; padding: 10px; justify-content:center;">
-        <button id="btnFiltroCoracao" style="padding:10px; cursor:pointer; background:#333; color:white; border:none; border-radius:5px;">❤️ Coração BR</button>
-        <button id="btnFiltroTaca" style="padding:10px; cursor:pointer; background:#333; color:white; border:none; border-radius:5px;">🏆 Taça</button>
-        <button id="btnFiltrobarbie" style="padding:10px; cursor:pointer; background:#333; color:white; border:none; border-radius:5px;">👱🏼‍♀️🎀barbie.png</button>
-        <button id="btnFiltrobeijaflor" style="padding:10px; cursor:pointer; background:#333; color:white; border:none; border-radius:5px;">🐦beijaflor.png</button>
-        <button id="btnFiltroborbuletazul" style="padding:10px; cursor:pointer; background:#333; color:white; border:none; border-radius:5px;">🦋borbuletazul.png</button>
-        <button id="btnFiltromeupastor" style="padding:10px; cursor:pointer; background:#333; color:white; border:none; border-radius:5px;">❤️‍🔥meupastor.png</button>
-        <button id="btnSeloBeijo" style="padding:10px; cursor:pointer; background:#333; color:white; border:none; border-radius:5px;">💋 Beijo</button>
-        <button id="btnSeloCoracaoNovo" style="padding:10px; cursor:pointer; background:#333; color:white; border:none; border-radius:5px;">💖 Novo Coração</button>
-        <button id="btnSeloJesus" style="padding:10px; cursor:pointer; background:#333; color:white; border:none; border-radius:5px;">🙏 Jesus</button>
-        <button id="btnSeloTermometro" style="padding:10px; cursor:pointer; background:#333; color:white; border:none; border-radius:5px;">🌡️ Termômetro</button>
-        <button id="btnSeloSol" style="padding:10px; cursor:pointer; background:#333; color:white; border:none; border-radius:5px;">☀️ Sol</button>
-      </div>
+   <div style="position: relative; width: 100%; max-width: 500px; margin: 0 auto;">
+      <canvas id="previewCanvas" style="width: 100%; display: block; border-radius: 12px;"></canvas>
+      
+      <img id="seloFlutuanteCoracao" src="brasil1.png" style="position: absolute; top: 20px; left: 20px; width: 60px; height: 60px; object-fit: contain; display: none;">
+      <img id="seloFlutuanteTaca" src="taçacopa1.png" style="position: absolute; top: 20px; right: 20px; width: 60px; height: 60px; object-fit: contain; display: none;">
+      <img id="seloFlutuanteBeijo" src="beijo.png" style="position: absolute; top: 80px; left: 20px; width: 60px; height: 60px; object-fit: contain; display: none;">
+      <img id="seloFlutuanteCoracaoNovo" src="coração.png" style="position: absolute; top: 80px; left: 100px; width: 60px; height: 60px; object-fit: contain; display: none;">
+      <img id="seloFlutuanteJesus" src="Jesus.png" style="position: absolute; top: 80px; right: 20px; width: 60px; height: 60px; object-fit: contain; display: none;">
+      <img id="seloFlutuanteTermometro" src="termometro.png" style="position: absolute; bottom: 20px; left: 20px; width: 60px; height: 60px; object-fit: contain; display: none;">
+      <img id="seloFlutuanteSol" src="sol.png" style="position: absolute; bottom: 20px; right: 20px; width: 60px; height: 60px; object-fit: contain; display: none;">
+      <img id="seloFlutuanteBarbie" src="barbie.png" style="position: absolute; top: 140px; left: 20px; width: 60px; height: 60px; object-fit: contain; display: none;">
+      <img id="seloFlutuanteBeijaFlor" src="beijaflor.png" style="position: absolute; top: 140px; left: 100px; width: 60px; height: 60px; object-fit: contain; display: none;">
+      <img id="seloFlutuanteBorboleta" src="borbuletazul.png" style="position: absolute; top: 140px; right: 20px; width: 60px; height: 60px; object-fit: contain; display: none;">
+      <img id="seloFlutuantePastor" src="meupastor.png" style="position: absolute; bottom: 80px; left: 20px; width: 60px; height: 60px; object-fit: contain; display: none;">
+    </div>
     </details>
 
     <div class="ia-container">
