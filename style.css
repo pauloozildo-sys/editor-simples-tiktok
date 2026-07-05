@@ -1,0 +1,239 @@
+body {
+  background: #121212;
+  color: white;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+
+#app {
+  background: #1e1e1e;
+  padding: 30px;
+  border-radius: 20px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 0 30px rgba(255,0,100,0.2);
+}
+
+input, button {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+button {
+  background: #ff2d75;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+button:hover {
+  background: #ff528a;
+}
+
+/* ====== CANVAS CORRIGIDO ====== */
+canvas {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  aspect-ratio: 1080 / 1920; /* <-- CORRIGIDO para 9:16 */
+  border-radius: 12px;
+  margin: 10px 0;
+  background: #000;
+  display: block;
+}
+
+/* ====== CONTAINER DOS SELOS ====== */
+#app > div:has(canvas) {
+  position: relative !important;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.posBtn, .alignBtn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 20px;
+  background: #333;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s;
+  flex: 1;
+  min-width: 60px;
+}
+
+.posBtn:hover, .alignBtn:hover {
+  background: #555;
+}
+
+.posBtn.ativo, .alignBtn.ativo {
+  background: #ff2d75;
+  box-shadow: 0 0 15px rgba(255,45,117,0.4);
+}
+
+.emojiBtn {
+  transition: 0.2s;
+  padding: 5px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.emojiBtn:hover {
+  background: #333;
+  transform: scale(1.3);
+}
+
+/* ====== ESPAÇO DA IA ====== */
+.ia-container {
+  background: #1a1a2e;
+  border-radius: 16px;
+  padding: 16px;
+  margin-top: 20px;
+  border: 1px solid #333;
+  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.1);
+}
+
+.ia-container label {
+  display: block;
+  font-size: 14px;
+  font-weight: bold;
+  color: #aaa;
+  margin-bottom: 8px;
+}
+
+.ia-row {
+  display: flex;
+  gap: 10px;
+}
+
+.ia-row input {
+  flex: 1;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: none;
+  background: #12121e;
+  color: #fff;
+  font-size: 15px;
+  outline: none;
+  transition: 0.3s;
+}
+
+.ia-row input:focus {
+  background: #1a1a2e;
+  box-shadow: 0 0 0 2px #8b5cf6;
+}
+
+.ia-row button {
+  background: #8b5cf6;
+  padding: 14px 24px;
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  white-space: nowrap;
+}
+
+.ia-row button:hover {
+  background: #7c3aed;
+  transform: scale(1.02);
+}
+
+.ia-status {
+  margin-top: 10px;
+  font-size: 13px;
+  color: #8b5cf6;
+  min-height: 22px;
+  font-style: italic;
+}
+
+/* ====== SELOS ARRASTÁVEIS CORRIGIDOS ====== */
+#seloFlutuanteCoracao, 
+#seloFlutuanteTaca, 
+#seloFlutuanteBeijo, 
+#seloFlutuanteCoracaoNovo, 
+#seloFlutuanteJesus, 
+#seloFlutuanteBorboleta,   
+#seloFlutuantePastor,      
+#seloFlutuanteBarbie,
+#seloFlutuanteTermometro,
+#seloFlutuanteBeijaFlor,   
+#seloFlutuanteSol {
+  position: absolute !important; /* <-- FORÇA POSITION ABSOLUTE */
+  cursor: grab; /* <-- MUDOU PARA GRAB (mais amigável) */
+  user-select: none;
+  pointer-events: auto !important; 
+  opacity: 1; 
+  z-index: 10;
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  transition: none; /* <-- REMOVE TRANSITION PARA NÃO TRAVAR O ARRASTE */
+}
+
+/* Quando estiver arrastando */
+#seloFlutuanteCoracao:active,
+#seloFlutuanteTaca:active,
+#seloFlutuanteBeijo:active,
+#seloFlutuanteCoracaoNovo:active,
+#seloFlutuanteJesus:active,
+#seloFlutuanteBorboleta:active,
+#seloFlutuantePastor:active,
+#seloFlutuanteBarbie:active,
+#seloFlutuanteTermometro:active,
+#seloFlutuanteBeijaFlor:active,
+#seloFlutuanteSol:active {
+  cursor: grabbing !important;
+  z-index: 20 !important; /* Fica por cima de tudo durante o arraste */
+  opacity: 0.9;
+}
+
+/* ====== RESPONSIVIDADE PARA MOBILE ====== */
+@media (max-width: 480px) {
+  #app {
+    padding: 15px;
+  }
+  
+  .posBtn, .alignBtn {
+    font-size: 12px;
+    padding: 6px 12px;
+    min-width: 50px;
+  }
+  
+  .ia-row {
+    flex-direction: column;
+  }
+  
+  .ia-row button {
+    width: 100%;
+  }
+  
+#seloFlutuanteCoracao, 
+#seloFlutuanteTaca, 
+#seloFlutuanteBeijo, 
+#seloFlutuanteCoracaoNovo, 
+#seloFlutuanteJesus, 
+#seloFlutuanteBorboleta,   
+#seloFlutuantePastor,      
+#seloFlutuanteBarbie,
+#seloFlutuanteTermometro,
+#seloFlutuanteBeijaFlor,   
+#seloFlutuanteSol {
+  cursor: move;
+  user-select: none;
+  pointer-events: auto !important; 
+  opacity: 0; /* <-- Mude para 0 aqui! O selo do HTML fica invisível e você só vê o do Canvas se mexendo */
+  z-index: 10;
+  }
+} 
