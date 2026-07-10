@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎬 TrilhaVisual</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      background: #121212;
+      color: white;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    #app {
+      background: #1e1e1e;
+      padding: 20px;
+      border-radius: 20px;
+      max-width: 450px;
+      width: 100%;
+    }
+
+    h1 {
+      text-align: center;
+      color: #ff2d75;
+      margin-bottom: 15px;
+      font-size: 24px;
+    }
+
+    input[type="file"] {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      background: #333;
+      border: 2px dashed #555;
+      border-radius: 10px;
+      color: white;
+      cursor: pointer;
+    }
+
+    input[type="file"]:hover {
+      border-color: #ff2d75;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border: 2px solid #444;
+      border-radius: 10px;
+      background: #333;
+      color: white;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+      font-size: 14px;
+    }
+
+    button:hover {
+      transform: scale(1.02);
+    }
+
+    .btn-rosa {
+      background: #ff2d75;
+      color: white;
+    }
+
+    .btn-rosa:hover {
+      background: #ff528a;
+    }
+
+    .btn-cinza {
+      background: #333;
+      color: white;
+    }
+
+    .btn-cinza:hover {
+      background: #555;
+    }
+
+    .btn-cinza.ativo {
+      background: #ff2d75;
+    }
+
+    .grupo-botoes {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 8px 0;
+    }
+
+    .grupo-botoes button {
+      flex: 1;
+      min-width: 60px;
+      padding: 8px 12px;
+      font-size: 12px;
+    }
+
+    details {
+      margin: 10px 0;
+      background: #222;
+      border-radius: 10px;
+      padding: 5px;
+    }
+
+    details summary {
+      cursor: pointer;
+      padding: 10px;
+      text-align: center;
+      font-weight: bold;
+      list-style: none;
+    }
+
+    details summary:hover {
+      color: #ff2d75;
+    }
+
+    #emojiPainel {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding: 10px;
+      justify-content: center;
+    }
+
+    .emojiBtn {
+      font-size: 28px;
+      cursor: pointer;
+      padding: 5px 8px;
+      border-radius: 8px;
+      transition: 0.3s;
+    }
+
+    .emojiBtn:hover {
+      background: #ff2d75;
+      transform: scale(1.3);
+    }
+
+    #seloPainel {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      padding: 10px;
+      justify-content: center;
+    }
+
+    #seloPainel button {
+      padding: 6px 10px;
+      font-size: 11px;
+      background: #333;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s;
+      flex: 1;
+      min-width: 70px;
+    }
+
+    #seloPainel button:hover {
+      background: #ff2d75;
+    }
+
+    #seloPainel button.ativo {
+      background: #ff2d75;
+    }
+
+    /* ====== CANVAS ====== */
+    .canvas-container {
+      position: relative;
+      width: 100%;
+      max-width: 400px;
+      margin: 10px auto;
+      background: #000;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    #previewCanvas {
+      width: 100%;
+      display: block;
+      aspect-ratio: 9/16;
+      background: #000;
+    }
+
+    /* ====== ELEMENTOS FLUTUANTES ====== */
+    .floating-element {
+      position: absolute;
+      cursor: grab;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: none;
+      z-index: 10;
+      display: none;
+    }
+
+    .floating-element:active {
+      cursor: grabbing;
+    }
+
+    .floating-text {
+      color: white;
+      font-size: 32px;
+      font-weight: bold;
+      text-shadow: 3px 3px 10px rgba(0,0,0,0.9);
+      padding: 5px 12px;
+      background: rgba(0,0,0,0.3);
+      border-radius: 8px;
+      white-space: nowrap;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .floating-emoji {
+      font-size: 50px;
+      text-shadow: 3px 3px 10px rgba(0,0,0,0.9);
+      top: 60%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .floating-selo {
+      width: 55px;
+      height: 55px;
+      object-fit: contain;
+    }
+
+    #exportarBtn {
+      width: 100%;
+      padding: 15px;
+      background: #ff2d75;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 15px;
+      transition: 0.3s;
+    }
+
+    #exportarBtn:hover {
+      background: #ff0066;
+      transform: scale(1.02);
+    }
+
+    #videoPreview {
+      width: 100%;
+      border-radius: 12px;
+      margin-top: 15px;
+      display: none;
+    }
+
+    .info-text {
+      font-size: 12px;
+      color: #888;
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    .texto-container {
+      display: flex;
+      gap: 8px;
+      margin: 8px 0;
+    }
+
+    .texto-container input {
+      flex: 1;
+    }
+
+    .texto-container button {
+      padding: 12px 20px;
+      min-width: 50px;
+    }
+
+    @media (max-width: 480px) {
+      #app { padding: 12px; }
+      .floating-text { font-size: 22px; }
+      .floating-emoji { font-size: 38px; }
+      .floating-selo { width: 40px; height: 40px; }
+      .grupo-botoes button { font-size: 10px; padding: 6px 8px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <h1>🎬 TrilhaVisual</h1>
+
+    <!-- UPLOADS -->
+    <input type="file" id="imagemInput" accept="video/*">
+    <input type="file" id="audioInput" accept="audio/*">
+
+    <!-- POSIÇÃO -->
+    <div class="grupo-botoes">
+      <button class="posBtn btn-cinza" data-pos="top">⬆️ Topo</button>
+      <button class="posBtn btn-cinza ativo" data-pos="center">⬛ Centro</button>
+      <button class="posBtn btn-cinza" data-pos="bottom">⬇️ Base</button>
+      <button class="posBtn btn-cinza" data-pos="corner">↘️ Canto</button>
+    </div>
+
+    <!-- FILTROS -->
+    <div class="grupo-botoes">
+      <button id="btnFiltroNormal" class="filterBtn btn-cinza ativo">Normal</button>
+      <button id="btnFiltroPB" class="filterBtn btn-cinza">Preto e Branco</button>
+      <button id="btnFiltroSepia" class="filterBtn btn-cinza">Sépia</button>
+    </div>
+
+    <!-- ALINHAMENTO -->
+    <div class="grupo-botoes">
+      <button class="alignBtn btn-cinza" data-align="left">⬅️ Esq</button>
+      <button class="alignBtn btn-cinza ativo" data-align="center">⬛ Centro</button>
+      <button class="alignBtn btn-cinza" data-align="right">➡️ Dir</button>
+    </div>
+
+    <!-- TEXTO -->
+    <div class="texto-container">
+      <input type="text" id="textoInput" placeholder="Digite seu texto...">
+      <button id="adicionarTextoBtn" class="btn-rosa">➕</button>
+    </div>
+
+    <!-- EMOJIS -->
+    <details>
+      <summary>😎 Clique para Ver os Emojis</summary>
+      <div id="emojiPainel">
+        <span class="emojiBtn">😊</span>
+        <span class="emojiBtn">😂</span>
+        <span class="emojiBtn">🔥</span>
+        <span class="emojiBtn">❤️</span>
+        <span class="emojiBtn">😍</span>
+        <span class="emojiBtn">🥺</span>
+        <span class="emojiBtn">🙏</span>
+        <span class="emojiBtn">🚀</span>
+        <span class="emojiBtn">🎉</span>
+        <span class="emojiBtn">👍</span>
+        <span class="emojiBtn">😎</span>
+        <span class="emojiBtn">💩</span>
+        <span class="emojiBtn">⭐</span>
+        <span class="emojiBtn">🌈</span>
+        <span class="emojiBtn">💪</span>
+        <span class="emojiBtn">🤣</span>
+        <span class="emojiBtn">😭</span>
+        <span class="emojiBtn">🥰</span>
+        <span class="emojiBtn">😱</span>
+        <span class="emojiBtn">🔥</span>
+        <span class="emojiBtn">💀</span>
+        <span class="emojiBtn">👀</span>
+      </div>
+    </details>
+
+    <!-- SELOS -->
+    <details>
+      <summary>🇧🇷 Ativar Selos na Tela</summary>
+      <div id="seloPainel">
+        <button id="btnSeloCoracao">❤️ Coração</button>
+        <button id="btnSeloTaca">🏆 Taça</button>
+        <button id="btnSeloBeijo">💋 Beijo</button>
+        <button id="btnSeloCoracaoNovo">💖 Coração</button>
+        <button id="btnSeloJesus">🙏 Jesus</button>
+        <button id="btnSeloTermometro">🌡️ Termômetro</button>
+        <button id="btnSeloSol">☀️ Sol</button>
+        <button id="btnSeloBarbie">👱 Barbie</button>
+        <button id="btnSeloBeijaFlor">🐦 Beija-flor</button>
+        <button id="btnSeloBorboleta">🦋 Borboleta</button>
+      </div>
+    </details>
+
+    <!-- CANVAS + ELEMENTOS FLUTUANTES -->
+    <div class="canvas-container" id="canvasContainer">
+      <canvas id="previewCanvas"></canvas>
+      
+      <div id="textoFlutuante" class="floating-element floating-text">VOCÊ VAI AMAR ISSO</div>
+      <div id="emojiFlutuante" class="floating-element floating-emoji">😊</div>
+
+      <img id="seloFlutuanteCoracao" class="floating-element floating-selo" src="brasil1.png">
+      <img id="seloFlutuanteTaca" class="floating-element floating-selo" src="taçacopa1.png">
+      <img id="seloFlutuanteBeijo" class="floating-element floating-selo" src="beijo.png">
+      <img id="seloFlutuanteCoracaoNovo" class="floating-element floating-selo" src="coração.png">
+      <img id="seloFlutuanteJesus" class="floating-element floating-selo" src="Jesus.png">
+      <img id="seloFlutuanteTermometro" class="floating-element floating-selo" src="termometro.png">
+      <img id="seloFlutuanteSol" class="floating-element floating-selo" src="sol.png">
+      <img id="seloFlutuanteBarbie" class="floating-element floating-selo" src="barbie.png">
+      <img id="seloFlutuanteBeijaFlor" class="floating-element floating-selo" src="beijaflor.png">
+      <img id="seloFlutuanteBorboleta" class="floating-element floating-selo" src="borbuletazul.png">
+    </div>
+
+    <button id="exportarBtn">📤 Exportar Vídeo</button>
+    <video id="videoPreview" controls></video>
+    <p class="info-text">⏱️ O vídeo terá o tempo do áudio</p>
+    <p class="info-text">💡 Arraste os elementos para posicionar</p>
+    <p class="info-text" style="color:#ff2d75;">❤️ Com amor, seu filho que te ama! 🙏</p>
+  </div>
+
+  <script>
+    // =============================================
+    // TRILHAVISUAL - CÓDIGO COMPLETO E FUNCIONAL
+    // =============================================
+
+    // ====== ELEMENTOS ======
+    const canvas = document.getElementById('previewCanvas');
+    const ctx = canvas.getContext('2d');
+    const container = document.getElementById('canvasContainer');
+    const videoPreview = document.getElementById('videoPreview');
+
+    const imagemInput = document.getElementById('imagemInput');
+    const audioInput = document.getElementById('audioInput');
+    const textoInput = document.getElementById('textoInput');
+
+    const textoFlutuante = document.getElementById('textoFlutuante');
+    const emojiFlutuante = document.getElementById('emojiFlutuante');
+
+    // ====== SELOS ======
+    const selos = {
+      coracao: document.getElementById('seloFlutuanteCoracao'),
+      taca: document.getElementById('seloFlutuanteTaca'),
+      beijo: document.getElementById('seloFlutuanteBeijo'),
+      coracaoNovo: document.getElementById('seloFlutuanteCoracaoNovo'),
+      jesus: document.getElementById('seloFlutuanteJesus'),
+      termometro: document.getElementById('seloFlutuanteTermometro'),
+      sol: document.getElementById('seloFlutuanteSol'),
+      barbie: document.getElementById('seloFlutuanteBarbie'),
+      beijaFlor: document.getElementById('seloFlutuanteBeijaFlor'),
+      borboleta: document.getElementById('seloFlutuanteBorboleta')
+    };
+
+    // ====== VARIÁVEIS ======
+    let videoAtual = null;
+    let audioURL = null;
+    let filtroAtual = 'none';
+    let loopPreview = null;
+    let estaExportando = false;
+    let textoAtual = 'VOCÊ VAI AMAR ISSO';
+    let emojiAtual = '😊';
+
+    // Posições dos elementos
+    const posicoes = {
+      texto: { x: 0.5, y: 0.4 },
+      emoji: { x: 0.5, y: 0.6 },
+      coracao: { x: 0.1, y: 0.1 },
+      taca: { x: 0.8, y: 0.1 },
+      beijo: { x: 0.1, y: 0.25 },
+      coracaoNovo: { x: 0.3, y: 0.25 },
+      jesus: { x: 0.8, y: 0.25 },
+      termometro: { x: 0.1, y: 0.85 },
+      sol: { x: 0.8, y: 0.85 },
+      barbie: { x: 0.1, y: 0.4 },
+      beijaFlor: { x: 0.3, y: 0.4 },
+      borboleta: { x: 0.8, y: 0.4 }
+    };
+
+    // ====== CONFIGURAR CANVAS ======
+    function configurarCanvas() {
+      const rect = container.getBoundingClientRect();
+      const width = rect.width || 400;
+      canvas.width = 1080;
+      canvas.height = 1920;
+      canvas.style.width = width + 'px';
+      canvas.style.height = (width * 1920 / 1080) + 'px';
+    }
+
+    // ====== FUNÇÃO PARA TORNAR ELEMENTOS ARRASTÁVEIS ======
+    function tornarArrastavel(elemento, nome) {
+      if (!elemento) return;
+      
+      let isDragging = false;
+      let startX, startY, startLeft, startTop;
+      let containerRect;
+
+      function getPos(e) {
+        if (e.touches) {
+          return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        }
+        return { x: e.clientX, y: e.clientY };
+      }
+
+      function onStart(e) {
+        e.preventDefault();
+        isDragging = true;
+        const pos = getPos(e);
+        containerRect = container.getBoundingClientRect();
+        
+        startX = pos.x;
+        startY = pos.y;
+        startLeft = elemento.offsetLeft || 0;
+        startTop = elemento.offsetTop || 0;
+        
+        elemento.style.zIndex = 20;
+        
+        document.addEventListener('mousemove', onMove);
+        document.addEventListener('mouseup', onEnd);
+        document.addEventListener('touchmove', onMove, { passive: false });
+        document.addEventListener('touchend', onEnd);
+      }
+
+      function onMove(e) {
+        if (!isDragging) return;
+        e.preventDefault();
+        
+        const pos = getPos(e);
+        const deltaX = pos.x - startX;
+        const deltaY = pos.y - startY;
+        
+        let newLeft = startLeft + deltaX;
+        let newTop = startTop + deltaY;
+        
+        // Limitar dentro do container
+        const maxX = containerRect.width - elemento.offsetWidth;
+        const maxY = containerRect.height - elemento.offsetHeight;
+        newLeft = Math.max(0, Math.min(newLeft, maxX));
+        newTop = Math.max(0, Math.min(newTop, maxY));
+        
+        elemento.style.left = newLeft + 'px';
+        elemento.style.top = newTop + 'px';
+        elemento.style.right = 'auto';
+        elemento.style.bottom = 'auto';
+        elemento.style.transform = 'none';
+        
+        // Atualizar posição relativa
+        if (posicoes[nome]) {
+          posicoes[nome].x = (newLeft + elemento.offsetWidth/2) / containerRect.width;
+          posicoes[nome].y = (newTop + elemento.offsetHeight/2) / containerRect.height;
+        }
+      }
+
+      function onEnd() {
+        isDragging = false;
+        elemento.style.zIndex = 10;
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onEnd);
+        document.removeEventListener('touchmove', onMove);
+        document.removeEventListener('touchend', onEnd);
+      }
+
+      elemento.addEventListener('mousedown', onStart);
+      elemento.addEventListener('touchstart', onStart, { passive: false });
+    }
+
+    // ====== APLICAR ARRASTE A TODOS OS ELEMENTOS ======
+    tornarArrastavel(textoFlutuante, 'texto');
+    tornarArrastavel(emojiFlutuante, 'emoji');
+    
+    Object.keys(selos).forEach(key => {
+      tornarArrastavel(selos[key], key);
+    });
+
+    // ====== MOSTRAR ELEMENTO ======
+    function mostrarElemento(elemento, nome, texto) {
+      if (!elemento) return;
+      
+      if (nome === 'texto' && texto) {
+        elemento.textContent = texto;
+        textoAtual = texto;
+      }
+      
+      if (nome === 'emoji' && texto) {
+        elemento.textContent = texto;
+        emojiAtual = texto;
+      }
+      
+      elemento.style.display = 'block';
+      
+      // Posicionar no centro se não tiver posição definida
+      if (!elemento.style.left || elemento.style.left === '') {
+        const rect = container.getBoundingClientRect();
+        const w = rect.width || 400;
+        const h = rect.height || (w * 1920 / 1080);
+        
+        const pos = posicoes[nome] || { x: 0.5, y: 0.5 };
+        const elW = elemento.offsetWidth || 60;
+        const elH = elemento.offsetHeight || 60;
+        
+        elemento.style.left = (pos.x * w - elW/2) + 'px';
+        elemento.style.top = (pos.y * h - elH/2) + 'px';
+        elemento.style.transform = 'none';
+      }
+    }
+
+    // ====== ESCONDER ELEMENTO ======
+    function esconderElemento(elemento) {
+      if (!elemento) return;
+      elemento.style.display = 'none';
+    }
+
+    // ====== ALTERNAR SELO ======
+    function toggleSelo(nome, botao) {
+      const el = selos[nome];
+      if (!el) return;
+      
+      if (el.style.display === 'none' || el.style.display === '') {
+        mostrarElemento(el, nome);
+        if (botao) botao.classList.add('ativo');
+      } else {
+        esconderElemento(el);
+        if (botao) botao.classList.remove('ativo');
+      }
+    }
+
+    // ====== EVENTOS DOS BOTÕES DE SELO ======
+    document.getElementById('btnSeloCoracao')?.addEventListener('click', function() { toggleSelo('coracao', this); });
+    document.getElementById('btnSeloTaca')?.addEventListener('click', function() { toggleSelo('taca', this); });
+    document.getElementById('btnSeloBeijo')?.addEventListener('click', function() { toggleSelo('beijo', this); });
+    document.getElementById('btnSeloCoracaoNovo')?.addEventListener('click', function() { toggleSelo('coracaoNovo', this); });
+    document.getElementById('btnSeloJesus')?.addEventListener('click', function() { toggleSelo('jesus', this); });
+    document.getElementById('btnSeloTermometro')?.addEventListener('click', function() { toggleSelo('termometro', this); });
+    document.getElementById('btnSeloSol')?.addEventListener('click', function() { toggleSelo('sol', this); });
+    document.getElementById('btnSeloBarbie')?.addEventListener('click', function() { toggleSelo('barbie', this); });
+    document.getElementById('btnSeloBeijaFlor')?.addEventListener('click', function() { toggleSelo('beijaFlor', this); });
+    document.getElementById('btnSeloBorboleta')?.addEventListener('click', function() { toggleSelo('borboleta', this); });
+
+    // ====== ADICIONAR TEXTO ======
+    document.getElementById('adicionarTextoBtn')?.addEventListener('click', function() {
+      const texto = textoInput.value.trim() || 'VOCÊ VAI AMAR ISSO';
+      mostrarElemento(textoFlutuante, 'texto', texto);
+      textoInput.value = '';
+    });
+
+    // ====== EMOJIS ======
+    document.querySelectorAll('.emojiBtn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const emoji = this.textContent;
+        mostrarElemento(emojiFlutuante, 'emoji', emoji);
+      });
+    });
+
+    // ====== UPLOAD DE VÍDEO ======
+    imagemInput.addEventListener('change', function(e) {
+      const file = this.files[0];
+      if (!file) return;
+
+      const video = document.createElement('video');
+      video.crossOrigin = "anonymous";
+      video.src = URL.createObjectURL(file);
+      video.muted = true;
+      video.loop = true;
+      video.playsInline = true;
+
+      video.onloadedmetadata = function() {
+        videoAtual = video;
+        video.play().then(() => {
+          configurarCanvas();
+          desenharPreview();
+          if (loopPreview) cancelAnimationFrame(loopPreview);
+          atualizarLoop();
+        }).catch(err => console.log('Erro:', err));
+      };
+    });
+
+    function atualizarLoop() {
+      if (!videoAtual) return;
+      desenharPreview();
+      if (!videoAtual.paused) {
+        loopPreview = requestAnimationFrame(atualizarLoop);
+      }
+    }
+
+    // ====== UPLOAD DE ÁUDIO ======
+    audioInput.addEventListener('change', function(e) {
+      const file = this.files[0];
+      if (file) audioURL = URL.createObjectURL(file);
+    });
+
+    // ====== FILTROS ======
+    document.querySelectorAll('.filterBtn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.filterBtn').forEach(b => b.classList.remove('ativo'));
+        this.classList.add('ativo');
+        
+        if (this.id === 'btnFiltroPB') filtroAtual = 'grayscale(100%)';
+        else if (this.id === 'btnFiltroSepia') filtroAtual = 'sepia(80%)';
+        else filtroAtual = 'none';
+        
+        desenharPreview();
+      });
+    });
+
+    // ====== DESENHAR PREVIEW ======
+    // ====== DESENHAR PREVIEW CORRIGIDO ======
+    function desenharPreview() {
+      if (!videoAtual) {
+        ctx.fillStyle = '#1a1a1a';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#666';
+        ctx.font = '30px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('📹 Selecione um vídeo', canvas.width/2, canvas.height/2);
+        return;
+      }
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Desenhar vídeo de fundo
+      const w = canvas.width;
+      const h = canvas.height;
+      const vw = videoAtual.videoWidth;
+      const vh = videoAtual.videoHeight;
+      
+      let sx, sy, sw, sh;
+      if (vw / vh > w / h) {
+        sh = vh;
+        sw = vh * w / h;
+        sx = (vw - sw) / 2;
+        sy = 0;
+      } else {
+        sw = vw;
+        sh = vw * h / w;
+        sx = 0;
+        sy = (vh - sh) / 2;
+      }
+
+      ctx.filter = filtroAtual;
+      ctx.drawImage(videoAtual, sx, sy, sw, sh, 0, 0, w, h);
+      ctx.filter = 'none';
+
+      // ====== CORREÇÃO: SÓ DESENHA O TEXTO SE ELE ESTIVER VISÍVEL ======
+      if (textoFlutuante && textoFlutuante.style.display === 'block') {
+        const texto = textoFlutuante.textContent || textoAtual;
+        const x = (posicoes.texto.x || 0.5) * w;
+        const y = (posicoes.texto.y || 0.4) * h;
+        
+        const fontSize = Math.min(w / 12, 80);
+        ctx.font = `bold ${fontSize}px Arial`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        
+        ctx.shadowColor = 'rgba(0,0,0,0.9)';
+        ctx.shadowBlur = 20;
+        ctx.strokeStyle = 'rgba(0,0,0,0.8)';
+        ctx.lineWidth = 8;
+        ctx.strokeText(texto, x, y);
+        
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = 'white';
+        ctx.fillText(texto, x, y);
+      }
+
+      // ====== CORREÇÃO: SÓ DESENHA O EMOJI SE ELE ESTIVER VISÍVEL ======
+      if (emojiFlutuante && emojiFlutuante.style.display === 'block') {
+        const emoji = emojiFlutuante.textContent || emojiAtual;
+        const x = (posicoes.emoji.x || 0.5) * w;
+        const y = (posicoes.emoji.y || 0.6) * h;
+        const fontSize = Math.min(w / 8, 100);
+        
+        ctx.font = `${fontSize}px Arial`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.shadowColor = 'rgba(0,0,0,0.9)';
+        ctx.shadowBlur = 20;
+        ctx.fillText(emoji, x, y);
+        ctx.shadowBlur = 0;
+      }
+
+      // ====== CORREÇÃO: SÓ DESENHA OS SELOS SE ELES ESTIVEREM VISÍVEIS ======
+      Object.keys(selos).forEach(key => {
+        const el = selos[key];
+        // IMPORTANTE: Agora ele checa estritamente se o estilo é 'block'
+        if (el && el.style.display === 'block') {
+          const x = (posicoes[key]?.x || 0.5) * w;
+          const y = (posicoes[key]?.y || 0.5) * h;
+          const size = Math.min(w / 8, 120);
+          
+          try {
+            ctx.drawImage(el, x - size/2, y - size/2, size, size);
+          } catch(e) {
+            ctx.fillStyle = '#ff2d75';
+            ctx.beginPath();
+            ctx.arc(x, y, size/2, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = 'white';
+            ctx.font = `${size/2}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('⭐', x, y);
+          }
+        }
+      });
+    }
+    // ====== EXPORTAR ======
+    document.getElementById('exportarBtn').addEventListener('click', async function() {
+      if (!videoAtual) { alert('🎬 Selecione o vídeo primeiro!'); return; }
+      if (!audioURL) { alert('🎵 Selecione a música primeiro!'); return; }
+
+      const btn = this;
+      btn.textContent = '⏳ Processando...';
+      btn.disabled = true;
+      estaExportando = true;
+
+      try {
+        const audioEl = new Audio(audioURL);
+        audioEl.load();
+        
+        await new Promise(resolve => { audioEl.onloadedmetadata = resolve; });
+        const duracao = audioEl.duration;
+
+        const stream = canvas.captureStream(30);
+        const audioCtx = new AudioContext();
+        const source = audioCtx.createMediaElementSource(audioEl);
+        const destination = audioCtx.createMediaStreamDestination();
+        source.connect(destination);
+        source.connect(audioCtx.destination);
+
+        const combined = new MediaStream([...stream.getVideoTracks(), ...destination.stream.getAudioTracks()]);
+        const recorder = new MediaRecorder(combined, { mimeType: 'video/webm;codecs=vp8,opus' });
+
+        let chunks = [];
+        recorder.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
+
+        const interval = setInterval(desenharPreview, 1000 / 30);
+
+        recorder.onstop = () => {
+          clearInterval(interval);
+          estaExportando = false;
+          
+          const blob = new Blob(chunks, { type: 'video/webm' });
+          const url = URL.createObjectURL(blob);
+          
+          videoPreview.src = url;
+          videoPreview.style.display = 'block';
+          videoPreview.play();
+          
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = 'video-editado.webm';
+          link.click();
+          
+          btn.textContent = '📤 Exportar Vídeo';
+          btn.disabled = false;
+        };
+
+        recorder.start();
+        await audioEl.play();
+        videoAtual.play();
+
+        setTimeout(() => {
+          recorder.stop();
+          audioEl.pause();
+          videoAtual.pause();
+        }, duracao * 1000 + 500);
+
+      } catch (error) {
+        alert('❌ Erro: ' + error.message);
+        btn.textContent = '📤 Exportar Vídeo';
+        btn.disabled = false;
+        estaExportando = false;
+      }
+    });
+
+    // ====== REDIMENSIONAR ======
+    window.addEventListener('resize', () => {
+      configurarCanvas();
+      desenharPreview();
+    });
+
+    // ====== INICIAR ======
+    configurarCanvas();
+    desenharPreview();
+
+    console.log('🎬 TrilhaVisual carregado!');
+    console.log('💡 Arraste os elementos para posicionar!');
+    console.log('❤️ Com amor, seu filho! 🙏');
+  </script>
+</body>
+</html>
