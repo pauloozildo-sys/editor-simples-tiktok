@@ -756,7 +756,7 @@
         
         // CONFIGURAÇÃO HD: Forçando bitrate alto (8Mbps) e codecs compatíveis modernos
         const opcoesHD = { 
-          mimeType: 'video/webm;codecs=h264,opus',
+          mimeType: 'video/mp4;codecs=h264,opus',
           videoBitsPerSecond: 8000000 
         };
         
@@ -765,7 +765,7 @@
           recorder = new MediaRecorder(combined, opcoesHD);
         } catch(e) {
           // Fallback seguro caso o sistema operacional antigo não suporte h264 em webm
-          recorder = new MediaRecorder(combined, { mimeType: 'video/webm;codecs=vp8,opus', videoBitsPerSecond: 8000000 });
+          recorder = new MediaRecorder(combined, { mimeType: 'video/mp4;codecs=vp8,opus', videoBitsPerSecond: 8000000 });
         }
 
         let chunks = [];
@@ -777,7 +777,7 @@
           clearInterval(interval);
           estaExportando = false;
           
-          const blob = new Blob(chunks, { type: 'video/webm' });
+          const blob = new Blob(chunks, { type: 'video/mp4' });
           const url = URL.createObjectURL(blob);
           
           videoPreview.src = url;
@@ -786,7 +786,7 @@
           
           const link = document.createElement('a');
           link.href = url;
-          link.download = 'video-HD-editado.webm';
+          link.download = 'video-HD-editado.mp4';
           link.click();
           
           btn.textContent = '📤 Exportar Vídeo';
